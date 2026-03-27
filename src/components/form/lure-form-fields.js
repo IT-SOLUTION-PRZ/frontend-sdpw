@@ -1,45 +1,68 @@
-// TYMCZASOWE PLACEHOLDERY
-
 export const lureFormFields = [
   {
-    id: "fish-species",
+    id: "fish_species_id",
     label: "Gatunek ryby *",
     placeholder: "Wybierz gatunek ryby",
-    options: ["Szczupak", "Sandacz", "Okoń", "Pstrąg"],
+    options: [
+      { label: "Szczupak", value: "1" },
+      { label: "Sandacz", value: "2" },
+      { label: "Okoń", value: "3" },
+      { label: "Pstrąg", value: "4" },
+    ],
   },
   {
-    id: "water-type",
+    id: "water_type_id",
     label: "Typ zbiornika wodnego *",
     placeholder: "Wybierz typ zbiornika",
-    options: ["Jezioro", "Rzeka", "Staw", "Zalew"],
+    options: [
+      { label: "Jezioro", value: "1" },
+      { label: "Rzeka", value: "2" },
+      { label: "Staw", value: "3" },
+      { label: "Zalew", value: "4" },
+    ],
   },
   {
-    id: "time-of-day",
+    id: "time_of_day_id",
     label: "Pora dnia *",
     placeholder: "Wybierz porę dnia",
-    options: ["Poranek", "Południe", "Wieczór", "Noc"],
+    options: [
+      { label: "Poranek", value: "1" },
+      { label: "Południe", value: "2" },
+      { label: "Wieczór", value: "3" },
+      { label: "Noc", value: "4" },
+    ],
   },
   {
-    id: "water-clarity",
+    id: "water_clarity_id",
     label: "Przejrzystość wody *",
     placeholder: "Wybierz przejrzystość wody",
-    options: ["Bardzo czysta", "Umiarkowana", "Mętna", "Bardzo mętna"],
+    options: [
+      { label: "Bardzo czysta", value: "1" },
+      { label: "Umiarkowana", value: "2" },
+      { label: "Mętna", value: "3" },
+      { label: "Bardzo mętna", value: "4" },
+    ],
   },
   {
-    id: "season",
+    id: "season_id",
     label: "Pora roku *",
     placeholder: "Wybierz porę roku",
-    options: ["Wiosna", "Lato", "Jesień", "Zima"],
+    options: [
+      { label: "Wiosna", value: "1" },
+      { label: "Lato", value: "2" },
+      { label: "Jesień", value: "3" },
+      { label: "Zima", value: "4" },
+    ],
   },
   {
-    id: "water-temperature",
+    id: "water_temperature_id",
     label: "Temperatura wody *",
     placeholder: "Wybierz temperaturę wody",
     options: [
-      "Zimna (poniżej 10°C)",
-      "Umiarkowana (10-18°C)",
-      "Ciepła (18-24°C)",
-      "Bardzo ciepła (powyżej 24°C)",
+      { label: "Zimna (poniżej 10°C)", value: "1" },
+      { label: "Umiarkowana (10-18°C)", value: "2" },
+      { label: "Ciepła (18-24°C)", value: "3" },
+      { label: "Bardzo ciepła (powyżej 24°C)", value: "4" },
     ],
   },
 ];

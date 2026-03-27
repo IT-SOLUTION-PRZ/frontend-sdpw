@@ -27,8 +27,9 @@ export function FormFieldSelect({ field, control, errorMessage }) {
             </SelectTrigger>
             <SelectContent>
               {field.options.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
+                
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
