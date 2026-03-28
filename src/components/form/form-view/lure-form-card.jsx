@@ -91,7 +91,7 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
       } catch (error) {
         console.error("Błąd pobierania danych z API:", error);
         setDynamicFields([]);
-        setFetchError(error instanceof Error ? error.message : "Wystąpił nieznany błąd podczas ładowania opcji.");
+        setFetchError("Nie udało się połączyć z serwerem.");
       } finally {
         setLoading(false);
       }
@@ -136,7 +136,7 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
 
     onSubmitSuccess?.({ ...result, success: true }, values, selectedLabels);
     
-  } catch (error) {
+  } catch {
     onSubmitSuccess?.({ 
       error: true, 
       message: "Problemy z połączeniem. Spróbuj ponownie później." 
@@ -144,12 +144,20 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
   }
 };
 
+  if (fetchError) {
+    return (
+      <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+        {fetchError}
+      </p>
+    );
+  }
+
   return (
     <FormCardContainer>
       <CardHeader className="pb-4">
         <CardTitle className="text-2xl text-slate-900">Dobór przynęty</CardTitle>
-        <CardDescription className={fetchError ? "text-red-600" : ""}>
-          {loading ? "Ładowanie danych z bazy SQL..." : fetchError || "Wybierz parametry połowu"}
+        <CardDescription>
+          {loading ? "Ładowanie danych z bazy SQL..." : "Wybierz parametry połowu"}
         </CardDescription>
       </CardHeader>
 
