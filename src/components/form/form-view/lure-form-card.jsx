@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { FormCardContainer } from "@/components/form/form-card-container"
-import { FormFieldSelect } from "@/components/form/form-field-select"
-import { lureFormDefaultValues, lureFormSchema } from "@/components/form/lure-form-schema"
+import { FormFieldSelect } from "@/components/form/form-view/form-field-select"
+import { lureFormDefaultValues, lureFormSchema } from "@/components/form/form-view/lure-form-schema"
 import { Button } from "@/components/ui/button"
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 

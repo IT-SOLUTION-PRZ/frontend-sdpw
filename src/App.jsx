@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { LureFormCard } from "@/components/form/lure-form-card"
-import { LurePageHeader } from "@/components/form/lure-page-header"
-import { LureResultsCard } from "@/components/form/lure-results-card"
+import { LureFormCard } from "@/components/form/form-view/lure-form-card"
+import { LurePageHeader } from "@/components/form/form-view/lure-page-header"
+import { LureResultsCard } from "@/components/form/results-view/lure-results-card"
 
 export default function App() {
   const [formValues, setFormValues] = useState(null)
