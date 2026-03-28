@@ -12,6 +12,7 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "@/component
 export function LureFormCard({ onSubmitSuccess, initialValues }) {
   const [dynamicFields, setDynamicFields] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
 
   const {
     control,
@@ -28,9 +29,21 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
+        setFetchError("");
         const response = await fetch('http://localhost:8000/api/v1/form-options/');
-        
-        if (!response.ok) throw new Error('Błąd odpowiedzi serwera');
+
+        if (!response.ok) {
+          let apiMessage = "";
+
+          try {
+            const errorData = await response.json();
+            apiMessage = errorData?.detail || errorData?.message || "";
+          } catch {
+            apiMessage = await response.text();
+          }
+
+          throw new Error(apiMessage || 'Nie udało się pobrać opcji formularza. Spróbuj ponownie.');
+        }
         
         const data = await response.json();
         console.log("Dane odebrane z Django:", data);
@@ -77,6 +90,8 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
         setDynamicFields(fieldsConfig);
       } catch (error) {
         console.error("Błąd pobierania danych z API:", error);
+        setDynamicFields([]);
+        setFetchError(error instanceof Error ? error.message : "Wystąpił nieznany błąd podczas ładowania opcji.");
       } finally {
         setLoading(false);
       }
@@ -133,8 +148,8 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
     <FormCardContainer>
       <CardHeader className="pb-4">
         <CardTitle className="text-2xl text-slate-900">Dobór przynęty</CardTitle>
-        <CardDescription>
-          {loading ? "Ładowanie danych z bazy SQL..." : "Wybierz parametry połowu"}
+        <CardDescription className={fetchError ? "text-red-600" : ""}>
+          {loading ? "Ładowanie danych z bazy SQL..." : fetchError || "Wybierz parametry połowu"}
         </CardDescription>
       </CardHeader>
 
@@ -151,7 +166,12 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
 
           <Button
             type="submit"
-            disabled={isSubmitting || loading || dynamicFields.every(f => f.options.length === 0)}
+            disabled={
+              isSubmitting ||
+              loading ||
+              Boolean(fetchError) ||
+              dynamicFields.every((f) => f.options.length === 0)
+            }
             className="mt-1 h-12 w-full bg-[#070224] text-base font-semibold hover:bg-[#161038]"
           >
             <Fish className="mr-2 size-4" />
