@@ -10,52 +10,45 @@ import {
 } from "lucide-react"
 
 import { FormCardContainer } from "@/components/form/form-card-container"
-import { lureFormFields } from "@/components/form/form-view/lure-form-fields"
 import { Button } from "@/components/ui/button"
 import { CardContent } from "@/components/ui/card"
 
-export function FishingConditionsCard({ onBack, userChoices }) {
-  const getOptionLabel = (fieldId, optionValue) => {
-    const field = lureFormFields.find((item) => item.id === fieldId)
-    const option = field?.options?.find((item) => item.value === String(optionValue))
-    return option?.label || "Brak danych"
-  }
-
+export function FishingConditionsCard({ onBack, selectedLabels }) {
   const conditionTiles = [
     {
       id: "fish_species_id",
       title: "Gatunek",
-      value: getOptionLabel("fish_species_id", userChoices?.fish_species_id),
+      value: selectedLabels?.fish_species_id || "Brak danych",
       icon: Fish,
     },
     {
       id: "water_type_id",
       title: "Zbiornik",
-      value: getOptionLabel("water_type_id", userChoices?.water_type_id),
+      value: selectedLabels?.water_type_id || "Brak danych",
       icon: Waves,
     },
     {
       id: "time_of_day_id",
       title: "Pora dnia",
-      value: getOptionLabel("time_of_day_id", userChoices?.time_of_day_id),
+      value: selectedLabels?.time_of_day_id || "Brak danych",
       icon: Clock3,
     },
     {
       id: "water_clarity_id",
       title: "Przejrzystość",
-      value: getOptionLabel("water_clarity_id", userChoices?.water_clarity_id),
+      value: selectedLabels?.water_clarity_id || "Brak danych",
       icon: Droplets,
     },
     {
       id: "season_id",
       title: "Sezon",
-      value: getOptionLabel("season_id", userChoices?.season_id),
+      value: selectedLabels?.season_id || "Brak danych",
       icon: CalendarDays,
     },
     {
       id: "water_temperature_id",
       title: "Temperatura",
-      value: getOptionLabel("water_temperature_id", userChoices?.water_temperature_id),
+      value: selectedLabels?.water_temperature_id || "Brak danych",
       icon: Thermometer,
     },
   ]

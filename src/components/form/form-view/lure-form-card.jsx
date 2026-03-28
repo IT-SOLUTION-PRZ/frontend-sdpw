@@ -86,6 +86,13 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
   }, []);
 
   const onSubmit = async (values) => {
+  const selectedLabels = dynamicFields.reduce((acc, field) => {
+    const selectedValue = values[field.id]
+    const selectedOption = field.options.find((option) => option.value === selectedValue)
+    acc[field.id] = selectedOption?.label || "Brak danych"
+    return acc
+  }, {})
+
   const payload = {
     fish_id: parseInt(values.fish_species_id),
     water_id: parseInt(values.water_type_id),
@@ -108,17 +115,17 @@ export function LureFormCard({ onSubmitSuccess, initialValues }) {
       onSubmitSuccess?.({ 
         error: true, 
         message: result.detail || result.message || "Brak dopasowania w bazie dla tych parametrów." 
-      }, values);
+      }, values, selectedLabels);
       return;
     }
 
-    onSubmitSuccess?.({ ...result, success: true }, values);
+    onSubmitSuccess?.({ ...result, success: true }, values, selectedLabels);
     
   } catch (error) {
     onSubmitSuccess?.({ 
       error: true, 
       message: "Problemy z połączeniem. Spróbuj ponownie później." 
-    }, values);
+    }, values, selectedLabels);
   }
 };
 

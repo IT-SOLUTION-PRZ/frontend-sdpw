@@ -5,12 +5,14 @@ import { LureResultsCard } from "@/components/form/results-view/lure-results-car
 
 export default function App() {
   const [formValues, setFormValues] = useState(null)
+  const [selectedLabels, setSelectedLabels] = useState(null)
   const [recommendation, setRecommendation] = useState(null)
   const [showResult, setShowResult] = useState(false)
 
-  const handleFormSubmit = (serverResult, userChoices) => {
+  const handleFormSubmit = (serverResult, userChoices, labels) => {
     setRecommendation(serverResult);
     setFormValues(userChoices);
+    setSelectedLabels(labels);
     setShowResult(true);
   }
 
@@ -21,7 +23,7 @@ export default function App() {
         {showResult ? (
           <LureResultsCard 
             result={recommendation} 
-            userChoices={formValues} 
+            selectedLabels={selectedLabels}
             onBack={() => setShowResult(false)} 
           />
         ) : (

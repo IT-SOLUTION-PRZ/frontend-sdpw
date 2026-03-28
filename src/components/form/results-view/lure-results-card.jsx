@@ -5,7 +5,7 @@ import { RecommendedBaitCard } from "@/components/form/results-view/recommended-
 import { Button } from "@/components/ui/button"
 import { CardContent } from "@/components/ui/card"
 
-export function LureResultsCard({ onBack, result, userChoices }) {
+export function LureResultsCard({ onBack, result, selectedLabels }) {
   const isError = !result?.id && result?.message;
   const noData = !result;
 
@@ -26,7 +26,7 @@ export function LureResultsCard({ onBack, result, userChoices }) {
 
   return (
     <div className="space-y-6">
-      <FishingConditionsCard onBack={onBack} userChoices={userChoices} result={result} />
+      <FishingConditionsCard onBack={onBack} selectedLabels={selectedLabels} />
       <RecommendedBaitCard result={result} />
     </div>
   )
