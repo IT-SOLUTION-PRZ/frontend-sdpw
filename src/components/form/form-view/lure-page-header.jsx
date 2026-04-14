@@ -11,7 +11,7 @@ export function LurePageHeader() {
           System Doboru Przynęty Wędkarskiej
         </h1>
       </div>
-      <p className="mx-auto max-w-[640px] text-sm leading-relaxed text-slate-500 sm:text-[15px]">
+      <p className="mx-auto max-w-160 text-sm leading-relaxed text-slate-500 sm:text-[15px]">
         Profesjonalne wsparcie w wyborze odpowiedniej przynęty do gatunku ryby i warunków połowu
       </p>
     </header>
