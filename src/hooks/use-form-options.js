@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 
-const FORM_OPTIONS_URL = "http://localhost:8000/api/v1/form-options/"
+const FORM_OPTIONS_URL = "/api/v1/form-options/"
 
 function mapApiOptionsToFields(data) {
   return [

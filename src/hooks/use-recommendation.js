@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 
-const RECOMMEND_URL = "http://localhost:8000/api/v1/recommend/"
+const RECOMMEND_URL = "/api/v1/recommend/"
 
 async function parseResponseJson(response) {
   try {
