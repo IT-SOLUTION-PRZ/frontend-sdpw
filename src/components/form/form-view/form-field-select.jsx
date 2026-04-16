@@ -21,7 +21,7 @@ export function FormFieldSelect({ field, control, errorMessage }) {
             <SelectTrigger
               id={field.id}
               aria-invalid={Boolean(errorMessage)}
-              className="h-12 border-slate-200 bg-slate-100/75 text-[15px]"
+              className="type-body h-12 border-slate-200 bg-slate-100/75"
             >
               <SelectValue placeholder={field.placeholder} />
             </SelectTrigger>
@@ -36,7 +36,7 @@ export function FormFieldSelect({ field, control, errorMessage }) {
           </Select>
         )}
       />
-      {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
+      {errorMessage ? <p className="type-caption text-destructive">{errorMessage}</p> : null}
     </div>
   )
 }

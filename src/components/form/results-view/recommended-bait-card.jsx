@@ -17,8 +17,8 @@ export function RecommendedBaitCard({ result }) {
         <div className="flex items-start gap-3">
           <Fish className="mt-0.5 size-5 text-blue-500" />
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold leading-tight text-slate-900">Rekomendowane przynęty</h2>
-            <p className="text-sm text-slate-500">
+            <h2 className="type-title text-slate-900">Rekomendowane przynęty</h2>
+            <p className="type-body text-slate-500">
               Znaleziono {count} rekomendacj{count === 1 ? "ę" : count < 5 ? "e" : "i"} dopasowan{count === 1 ? "ą" : "ych"} do wybranych warunków
             </p>
           </div>
@@ -35,35 +35,35 @@ export function RecommendedBaitCard({ result }) {
               className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
             >
               <div className="flex items-start gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-bold text-white">
+                <div className="type-caption flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500 font-bold text-white">
                   {index + 1}
                 </div>
 
                 <div className="min-w-0">
-                  <h3 className="text-2xl font-bold text-slate-900">
+                  <h3 className="type-title text-slate-900">
                     {bait.name || "Nieznana przynęta"}
                   </h3>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">
+                    <span className="type-caption rounded-full bg-blue-100 px-3 py-1 font-semibold text-blue-800">
                       {bait.producer_name || "Nieznany producent"}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
+              <p className="type-body mt-4 text-slate-700">
                 {bait.description || "Brak opisu przynęty."}
               </p>
 
-              <p className="mt-3 text-sm leading-relaxed text-slate-700">
+              <p className="type-body mt-3 text-slate-700">
                 <span className="font-semibold text-slate-900">Wskazówki użycia: </span>
                 {bait.usage_tips || "Brak wskazówek użycia."}
               </p>
 
               {rec?.additional_info && (
                 <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-                  <p className="mb-2 text-sm font-semibold text-slate-900">Dodatkowe informacje</p>
-                  <p className="text-sm leading-relaxed text-slate-700">
+                  <p className="type-body mb-2 font-semibold text-slate-900">Dodatkowe informacje</p>
+                  <p className="type-body text-slate-700">
                     {rec.additional_info}
                   </p>
                 </div>
