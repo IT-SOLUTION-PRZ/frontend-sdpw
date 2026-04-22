@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 
-const FORM_OPTIONS_URL = "/api/v1/form-options/"
+const API_BASE_URL = import.meta.env.VITE_API_URL || ""
+const FORM_OPTIONS_URL = `${API_BASE_URL}/api/v1/form-options/`
 
 function mapApiOptionsToFields(data) {
   return [
