@@ -5,9 +5,26 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Typography system (mobile-first, fluid):
+ * - type-display: główne nagłówki stron/sekcji hero
+ * - type-title: tytuły kart i sekcji
+ * - type-body: podstawowe treści i opisy
+ * - type-caption: drobne opisy, pomocnicze etykiety i stopka
+ *
+ * Zasada: w komponentach domenowych używaj klas type-* zamiast ręcznych text-*.
+ */
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
+  --text-display: clamp(1.125rem, 0.85rem + 1.25vw, 2.625rem);
+  --text-title: clamp(1rem, 0.9rem + 0.55vw, 1.5rem);
+  --text-body: clamp(0.875rem, 0.84rem + 0.18vw, 1rem);
+  --text-caption: clamp(0.75rem, 0.72rem + 0.12vw, 0.875rem);
+  --leading-display: 1.12;
+  --leading-title: 1.2;
+  --leading-body: 1.55;
+  --leading-caption: 1.45;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -127,4 +144,30 @@
   html {
     @apply font-sans;
     }
+}
+
+@layer components {
+  .type-display {
+    font-size: var(--text-display) !important;
+    line-height: var(--leading-display) !important;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .type-title {
+    font-size: var(--text-title) !important;
+    line-height: var(--leading-title) !important;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .type-body {
+    font-size: var(--text-body) !important;
+    line-height: var(--leading-body) !important;
+  }
+
+  .type-caption {
+    font-size: var(--text-caption) !important;
+    line-height: var(--leading-caption) !important;
+  }
 }

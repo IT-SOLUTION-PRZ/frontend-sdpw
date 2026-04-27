@@ -37,7 +37,7 @@ export function LureResultsCard({ onBack, result, selectedLabels, isLoading = fa
     return (
       <FormCardContainer>
         <CardContent className="p-6 text-center">
-          <p className="text-red-500 font-semibold text-lg mb-4">
+          <p className="type-title mb-4 font-semibold text-red-500">
             {result?.message || "Nie znaleźliśmy idealnej przynęty dla tych warunków."}
           </p>
           <Button onClick={onBack} variant="outline" className="text-slate-900 border-slate-300">

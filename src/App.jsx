@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { LureFormCard } from "@/components/form/form-view/lure-form-card"
-import { LurePageHeader } from "@/components/form/form-view/lure-page-header"
+import { LurePageHeader } from "@/components/layout/lure-page-header"
 import { LureResultsCard } from "@/components/form/results-view/lure-results-card"
+import { PageFooter } from "@/components/layout/page-footer"
 
 export default function App() {
   const [formValues, setFormValues] = useState(null)
@@ -47,6 +48,7 @@ export default function App() {
             onSubmitSuccess={handleFormSubmit}
           />
         )}
+        <PageFooter />
       </div>
     </main>
   )

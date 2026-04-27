@@ -59,8 +59,8 @@ export function FishingConditionsCard({ onBack, selectedLabels }) {
         <div className="flex items-start gap-3">
           <Info className="mt-0.5 size-5 text-blue-500" />
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold leading-tight text-slate-900">Warunki połowu</h2>
-            <p className="text-sm text-slate-500">Wybrane parametry dla rekomendacji</p>
+            <h2 className="type-title text-slate-900">Warunki połowu</h2>
+            <p className="type-body text-slate-500">Wybrane parametry dla rekomendacji</p>
           </div>
         </div>
       </div>
@@ -78,8 +78,8 @@ export function FishingConditionsCard({ onBack, selectedLabels }) {
                 <div className="flex items-center gap-3">
                   <TileIcon className="size-5 shrink-0 text-indigo-500" />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium leading-none text-slate-500">{tile.title}</p>
-                    <p className="mt-2 truncate text-sm font-bold leading-none text-slate-900">{tile.value}</p>
+                    <p className="type-caption truncate font-medium text-slate-500">{tile.title}</p>
+                    <p className="type-body mt-2 truncate font-semibold text-slate-900">{tile.value}</p>
                   </div>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export function FishingConditionsCard({ onBack, selectedLabels }) {
           type="button"
           onClick={onBack}
           variant="outline"
-          className="mt-5 h-11 rounded-xl border-slate-300 px-5 text-base font-semibold text-slate-800 hover:bg-slate-100"
+          className="type-body mt-5 h-11 rounded-xl border-slate-300 px-5 font-semibold text-slate-800 hover:bg-slate-100"
         >
           <RotateCcw className="mr-2 size-4" />
           Zmień warunki
