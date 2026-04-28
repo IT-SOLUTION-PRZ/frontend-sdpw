@@ -9,37 +9,37 @@ function mapApiOptionsToFields(data) {
     {
       id: "fish_species_id",
       label: "Gatunek ryby",
-      placeholder: "Wybierz rybę...",
+      placeholder: "Wybierz gatunek ryby...",
       options: (data.fish_species || []).map((item) => ({ value: String(item.id), label: item.name })),
     },
     {
       id: "water_type_id",
       label: "Typ zbiornika",
-      placeholder: "Gdzie łowisz?",
+      placeholder: "Wybierz typ zbiornika...",
       options: (data.water_types || []).map((item) => ({ value: String(item.id), label: item.name })),
     },
     {
       id: "season_id",
       label: "Pora roku",
-      placeholder: "Wybierz sezon...",
+      placeholder: "Wybierz porę roku...",
       options: (data.seasons || []).map((item) => ({ value: String(item.id), label: item.name })),
     },
     {
       id: "time_of_day_id",
       label: "Pora dnia",
-      placeholder: "Kiedy łowisz?",
+      placeholder: "Wybierz porę dnia...",
       options: (data.times_of_day || []).map((item) => ({ value: String(item.id), label: item.name })),
     },
     {
       id: "water_clarity_id",
       label: "Klarowność wody",
-      placeholder: "Jaka jest woda?",
+      placeholder: "Wybierz klarowność wody...",
       options: (data.water_clarities || []).map((item) => ({ value: String(item.id), label: item.name })),
     },
     {
       id: "water_temperature_id",
       label: "Temperatura wody",
-      placeholder: "Wybierz temperaturę...",
+      placeholder: "Wybierz temperaturę wody...",
       options: (data.water_temperatures || []).map((item) => ({ value: String(item.id), label: item.name })),
     },
   ]
