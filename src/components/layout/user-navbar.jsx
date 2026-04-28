@@ -21,7 +21,7 @@ export function UserNavbar() {
       <Button
         asChild
         variant="outline"
-        className="type-caption h-11 rounded-full border-slate-200 bg-white/85 px-3 font-semibold text-slate-700 shadow-sm hover:bg-white hover:text-slate-950 sm:px-4"
+        className="type-caption h-11 rounded-full border-slate-200 bg-white/85 px-3 font-semibold text-slate-700 shadow-sm hover:bg-white hover:text-slate-950 sm:min-w-32 sm:px-4"
       >
         <Link to="/login" aria-label="Przejdź do logowania">
           <LogIn className="size-4" />
@@ -34,17 +34,17 @@ export function UserNavbar() {
   return (
     <details className="group relative">
       <summary
-        className="type-caption flex h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-2 pr-2.5 font-semibold text-slate-700 shadow-sm outline-none transition-colors hover:bg-white hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-2.5 sm:pr-3 [&::-webkit-details-marker]:hidden"
+        className="type-caption flex h-11 max-w-44 cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-2 pr-2.5 font-semibold text-slate-700 shadow-sm outline-none transition-colors hover:bg-white hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50 sm:min-w-36 sm:max-w-52 sm:px-2.5 sm:pr-3 [&::-webkit-details-marker]:hidden"
         aria-label={`Menu użytkownika ${user.username}`}
       >
         <span className="flex size-8 items-center justify-center rounded-full bg-[#070224] text-white">
           <UserRound className="size-4" />
         </span>
-        <span className="hidden max-w-28 truncate sm:inline">{user.username}</span>
+        <span className="hidden min-w-0 max-w-28 truncate sm:inline md:max-w-36">{user.username}</span>
         <ChevronDown className="hidden size-4 transition-transform group-open:rotate-180 sm:block" />
       </summary>
 
-      <div className="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 text-left shadow-xl">
+      <div className="absolute right-0 z-20 mt-2 w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 text-left shadow-xl">
         <div className="border-b border-slate-100 px-3 py-2">
           <p className="type-caption font-semibold text-slate-900">{user.username}</p>
           <p className="truncate text-xs text-slate-500">{user.email}</p>

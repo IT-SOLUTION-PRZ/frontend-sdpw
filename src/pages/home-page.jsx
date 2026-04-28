@@ -29,26 +29,28 @@ export function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#ecf3f7] px-4 py-10">
-      <div className="mx-auto max-w-190 flex flex-col gap-9">
+    <main className="min-h-screen bg-[#ecf3f7] px-4 py-6 sm:py-8">
+      <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-190 flex-col gap-8 sm:min-h-[calc(100vh-4rem)] sm:gap-9">
         <LurePageHeader />
-        {showResult ? (
-          <LureResultsCard
-            result={recommendation}
-            selectedLabels={selectedLabels}
-            isLoading={resultLoading}
-            onBack={() => {
-              setShowResult(false)
-              setResultLoading(false)
-            }}
-          />
-        ) : (
-          <LureFormCard
-            initialValues={formValues}
-            onSubmitStart={handleSubmitStart}
-            onSubmitSuccess={handleFormSubmit}
-          />
-        )}
+        <section className="flex flex-1 items-start justify-center">
+          {showResult ? (
+            <LureResultsCard
+              result={recommendation}
+              selectedLabels={selectedLabels}
+              isLoading={resultLoading}
+              onBack={() => {
+                setShowResult(false)
+                setResultLoading(false)
+              }}
+            />
+          ) : (
+            <LureFormCard
+              initialValues={formValues}
+              onSubmitStart={handleSubmitStart}
+              onSubmitSuccess={handleFormSubmit}
+            />
+          )}
+        </section>
         <PageFooter />
       </div>
     </main>
