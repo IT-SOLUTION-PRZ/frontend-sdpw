@@ -1,15 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
-import { API_BASE_URL } from "@/lib/api-config"
-import { setTokens } from "@/lib/auth-storage"
-import { formatApiError } from "@/lib/format-api-error"
-
-const AUTH_TOKEN_URL = `${API_BASE_URL}/api/v1/auth/token/`
-const AUTH_REGISTER_URL = `${API_BASE_URL}/api/v1/auth/register/`
+import { useAuthStore } from "@/stores/auth-store"
 
 const loginSchema = z.object({
   email: z.string().min(1, "Podaj adres e-mail").email("Podaj poprawny adres e-mail"),
@@ -31,14 +25,15 @@ const registerSchema = z
     path: ["confirmPassword"],
   })
 
-const parseJson = async (response) => response.json().catch(() => ({}))
-
 export const useAuthForms = () => {
   const navigate = useNavigate()
-  const [loginError, setLoginError] = useState("")
-  const [registerError, setRegisterError] = useState("")
-  const [loginSubmitting, setLoginSubmitting] = useState(false)
-  const [registerSubmitting, setRegisterSubmitting] = useState(false)
+  const login = useAuthStore((state) => state.login)
+  const register = useAuthStore((state) => state.register)
+  const loginError = useAuthStore((state) => state.loginError)
+  const registerError = useAuthStore((state) => state.registerError)
+  const loginSubmitting = useAuthStore((state) => state.loginSubmitting)
+  const registerSubmitting = useAuthStore((state) => state.registerSubmitting)
+  const clearAuthErrors = useAuthStore((state) => state.clearAuthErrors)
 
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -59,71 +54,22 @@ export const useAuthForms = () => {
   })
 
   const handleTabChange = () => {
-    setLoginError("")
-    setRegisterError("")
+    clearAuthErrors()
   }
 
   const handleLoginSubmit = loginForm.handleSubmit(async (data) => {
-    setLoginError("")
-    setLoginSubmitting(true)
-
-    try {
-      const response = await fetch(AUTH_TOKEN_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email, password: data.password }),
-      })
-      const result = await parseJson(response)
-
-      if (!response.ok) {
-        setLoginError(formatApiError(result))
-        return
-      }
-
-      if (result.access && result.refresh) {
-        setTokens(result.access, result.refresh)
-      }
-
+    const wasLoggedIn = await login(data)
+    if (wasLoggedIn) {
       loginForm.reset()
       navigate("/")
-    } catch {
-      setLoginError("Nie udało się połączyć z serwerem.")
-    } finally {
-      setLoginSubmitting(false)
     }
   })
 
   const handleRegisterSubmit = registerForm.handleSubmit(async (data) => {
-    setRegisterError("")
-    setRegisterSubmitting(true)
-
-    try {
-      const response = await fetch(AUTH_REGISTER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: data.username,
-          email: data.email,
-          password: data.password,
-        }),
-      })
-      const result = await parseJson(response)
-
-      if (!response.ok) {
-        setRegisterError(formatApiError(result))
-        return
-      }
-
-      if (result.access && result.refresh) {
-        setTokens(result.access, result.refresh)
-      }
-
+    const wasRegistered = await register(data)
+    if (wasRegistered) {
       registerForm.reset()
       navigate("/")
-    } catch {
-      setRegisterError("Nie udało się połączyć z serwerem.")
-    } finally {
-      setRegisterSubmitting(false)
     }
   })
 
