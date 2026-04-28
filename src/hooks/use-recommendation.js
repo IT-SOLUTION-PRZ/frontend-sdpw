@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react"
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || ""
+import { API_BASE_URL } from "@/lib/api-config"
+
 const RECOMMEND_URL = `${API_BASE_URL}/api/v1/recommend/`
 
 async function parseResponseJson(response) {
