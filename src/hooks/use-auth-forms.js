@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { useAuthStore } from "@/stores/auth-store"
@@ -58,19 +59,33 @@ export const useAuthForms = () => {
   }
 
   const handleLoginSubmit = loginForm.handleSubmit(async (data) => {
-    const wasLoggedIn = await login(data)
-    if (wasLoggedIn) {
-      loginForm.reset()
-      navigate("/")
+    const result = await login(data)
+    if (!result.success) {
+      toast.error("Nie udało się zalogować", {
+        description: result.error,
+      })
+      return
     }
+
+    toast.success("Zalogowano pomyślnie")
+    loginForm.reset()
+    navigate("/")
   })
 
   const handleRegisterSubmit = registerForm.handleSubmit(async (data) => {
-    const wasRegistered = await register(data)
-    if (wasRegistered) {
-      registerForm.reset()
-      navigate("/")
+    const result = await register(data)
+    if (!result.success) {
+      toast.error("Nie udało się utworzyć konta", {
+        description: result.error,
+      })
+      return
     }
+
+    toast.success("Konto zostało utworzone", {
+      description: "Zalogowano Cię automatycznie.",
+    })
+    registerForm.reset()
+    navigate("/")
   })
 
   return {

@@ -61,22 +61,25 @@ export const useAuthStore = create((set, get) => ({
       const result = await parseJson(response)
 
       if (!response.ok) {
-        set({ loginError: formatApiError(result), loginSubmitting: false })
-        return false
+        const loginError = formatApiError(result)
+        set({ loginError, loginSubmitting: false })
+        return { success: false, error: loginError }
       }
 
       if (!result.access || !result.refresh) {
-        set({ loginError: "Serwer nie zwrócił tokenów logowania.", loginSubmitting: false })
-        return false
+        const loginError = "Serwer nie zwrócił tokenów logowania."
+        set({ loginError, loginSubmitting: false })
+        return { success: false, error: loginError }
       }
 
       setTokens(result.access, result.refresh)
       await get().fetchCurrentUser()
       set({ loginSubmitting: false })
-      return true
+      return { success: true }
     } catch {
-      set({ loginError: "Nie udało się połączyć z serwerem.", loginSubmitting: false })
-      return false
+      const loginError = "Nie udało się połączyć z serwerem."
+      set({ loginError, loginSubmitting: false })
+      return { success: false, error: loginError }
     }
   },
 
@@ -92,21 +95,24 @@ export const useAuthStore = create((set, get) => ({
       const result = await parseJson(response)
 
       if (!response.ok) {
-        set({ registerError: formatApiError(result), registerSubmitting: false })
-        return false
+        const registerError = formatApiError(result)
+        set({ registerError, registerSubmitting: false })
+        return { success: false, error: registerError }
       }
 
       if (!result.access || !result.refresh) {
-        set({ registerError: "Serwer nie zwrócił tokenów logowania.", registerSubmitting: false })
-        return false
+        const registerError = "Serwer nie zwrócił tokenów logowania."
+        set({ registerError, registerSubmitting: false })
+        return { success: false, error: registerError }
       }
 
       setTokens(result.access, result.refresh)
       set({ user: result.user ?? null, hasCheckedAuth: true, registerSubmitting: false })
-      return true
+      return { success: true }
     } catch {
-      set({ registerError: "Nie udało się połączyć z serwerem.", registerSubmitting: false })
-      return false
+      const registerError = "Nie udało się połączyć z serwerem."
+      set({ registerError, registerSubmitting: false })
+      return { success: false, error: registerError }
     }
   },
 
