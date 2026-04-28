@@ -1,13 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { useAuthStore } from "@/stores/auth-store"
 
 const loginSchema = z.object({
-  email: z.string().min(1, "Podaj adres e-mail").email("Podaj poprawny adres e-mail"),
+  email: z.string().min(1, "Podaj login lub adres e-mail"),
   password: z.string().min(1, "Podaj hasło"),
 })
 
@@ -27,6 +27,7 @@ const registerSchema = z
   })
 
 export const useAuthForms = () => {
+  const location = useLocation()
   const navigate = useNavigate()
   const login = useAuthStore((state) => state.login)
   const register = useAuthStore((state) => state.register)
@@ -69,7 +70,7 @@ export const useAuthForms = () => {
 
     toast.success("Zalogowano pomyślnie")
     loginForm.reset()
-    navigate("/")
+    navigate(location.state?.from?.pathname ?? "/")
   })
 
   const handleRegisterSubmit = registerForm.handleSubmit(async (data) => {

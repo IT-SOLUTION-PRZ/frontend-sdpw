@@ -11,10 +11,10 @@ const loginFields = [
   {
     id: "login-email",
     name: "email",
-    label: "Adres e-mail",
-    type: "email",
-    placeholder: "jan@example.com",
-    autoComplete: "email",
+    label: "Login lub adres e-mail",
+    type: "text",
+    placeholder: "jan.kowalski lub jan@example.com",
+    autoComplete: "username",
   },
   {
     id: "login-password",

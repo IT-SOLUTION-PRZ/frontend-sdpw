@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { useCurrentUser } from "@/hooks/use-current-user"
+import { hasStaffSuperuserAccess } from "@/lib/has-staff-superuser-access"
 
 export function UserNavbar() {
   const { user, loading, logout } = useCurrentUser()
@@ -21,7 +22,7 @@ export function UserNavbar() {
       <Button
         asChild
         variant="outline"
-        className="type-caption h-11 rounded-full border-slate-200 bg-white/85 px-3 font-semibold text-slate-700 shadow-sm hover:bg-white hover:text-slate-950 sm:min-w-32 sm:px-4"
+        className="type-caption h-11 rounded-full border-slate-200 bg-white/85 px-3 font-semibold text-slate-700 shadow-sm hover:bg-white hover:text-slate-950"
       >
         <Link to="/login" aria-label="Przejdź do logowania">
           <LogIn className="size-4" />
@@ -31,16 +32,18 @@ export function UserNavbar() {
     )
   }
 
+  const canAccessAdmin = hasStaffSuperuserAccess(user)
+
   return (
     <details className="group relative">
       <summary
-        className="type-caption flex h-11 max-w-44 cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-2 pr-2.5 font-semibold text-slate-700 shadow-sm outline-none transition-colors hover:bg-white hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50 sm:min-w-36 sm:max-w-52 sm:px-2.5 sm:pr-3 [&::-webkit-details-marker]:hidden"
+        className="type-caption flex h-11 w-fit max-w-36 cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-2 pr-2.5 font-semibold text-slate-700 shadow-sm outline-none transition-colors hover:bg-white hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50 sm:max-w-44 [&::-webkit-details-marker]:hidden"
         aria-label={`Menu użytkownika ${user.username}`}
       >
         <span className="flex size-8 items-center justify-center rounded-full bg-[#070224] text-white">
           <UserRound className="size-4" />
         </span>
-        <span className="hidden min-w-0 max-w-28 truncate sm:inline md:max-w-36">{user.username}</span>
+        <span className="hidden min-w-0 max-w-16 truncate sm:inline md:max-w-24">{user.username}</span>
         <ChevronDown className="hidden size-4 transition-transform group-open:rotate-180 sm:block" />
       </summary>
 
@@ -50,14 +53,15 @@ export function UserNavbar() {
           <p className="truncate text-xs text-slate-500">{user.email}</p>
         </div>
 
-        {user.is_staff ? (
-          <a
-            href="/admin/"
+        {canAccessAdmin ? (
+          <Link
+            to="/admin"
             className="type-caption mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 font-semibold text-slate-600 outline-none transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50"
+            aria-label="Przejdź do panelu admina"
           >
             <ShieldCheck className="size-4" />
             Panel admina
-          </a>
+          </Link>
         ) : null}
 
         <button
