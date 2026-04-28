@@ -1,33 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Fish, LogIn, ShieldCheck, UserPlus } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-const loginSchema = z.object({
-  email: z.string().min(1, "Podaj adres e-mail").email("Podaj poprawny adres e-mail"),
-  password: z.string().min(1, "Podaj hasło"),
-})
-
-const registerSchema = z
-  .object({
-    username: z
-      .string()
-      .min(3, "UserName musi mieć co najmniej 3 znaki")
-      .max(32, "UserName może mieć maksymalnie 32 znaki"),
-    email: z.string().min(1, "Podaj adres e-mail").email("Podaj poprawny adres e-mail"),
-    password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
-    confirmPassword: z.string().min(1, "Powtórz hasło"),
-  })
-  .refine((values) => values.password === values.confirmPassword, {
-    message: "Hasła muszą być takie same",
-    path: ["confirmPassword"],
-  })
+import { useAuthForms } from "@/hooks/use-auth-forms"
 
 const loginFields = [
   {
@@ -108,31 +86,17 @@ const AuthField = ({ field, errorMessage, register }) => (
 )
 
 export function LoginPage() {
-  const loginForm = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  })
-
-  const registerForm = useForm({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  })
-
-  const handleLoginSubmit = () => {
-    loginForm.clearErrors()
-  }
-
-  const handleRegisterSubmit = () => {
-    registerForm.clearErrors()
-  }
+  const {
+    loginForm,
+    registerForm,
+    loginError,
+    registerError,
+    loginSubmitting,
+    registerSubmitting,
+    handleLoginSubmit,
+    handleRegisterSubmit,
+    handleTabChange,
+  } = useAuthForms()
 
   return (
     <main className="min-h-screen bg-[#ecf3f7] px-4 py-10">
@@ -149,8 +113,8 @@ export function LoginPage() {
             </p>
             <h1 className="type-display text-balance text-slate-900">Zaloguj się do aplikacji</h1>
             <p className="type-body text-balance text-slate-500">
-              Zapisuj swoje rekomendacje, wracaj do historii połowów i szybciej dobieraj przynętę przy
-              kolejnych wyprawach.
+              Zapisuj swoje rekomendacje, wracaj do historii połowów i szybciej dobieraj przynętę przy kolejnych
+              wyprawach.
             </p>
           </div>
         </section>
@@ -164,7 +128,7 @@ export function LoginPage() {
           </CardHeader>
 
           <CardContent>
-            <Tabs defaultValue="login" className="gap-6">
+            <Tabs defaultValue="login" className="gap-6" onValueChange={handleTabChange}>
               <TabsList className="grid h-11 w-full grid-cols-2 bg-slate-100">
                 <TabsTrigger value="login" className="type-caption h-full">
                   <LogIn className="size-4" />
@@ -177,7 +141,13 @@ export function LoginPage() {
               </TabsList>
 
               <TabsContent value="login">
-                <form className="space-y-5" noValidate onSubmit={loginForm.handleSubmit(handleLoginSubmit)}>
+                <form className="space-y-5" noValidate onSubmit={handleLoginSubmit}>
+                  {loginError ? (
+                    <p role="alert" className="type-caption rounded-md border border-red-200 bg-red-50 px-3 py-2 font-medium text-red-700">
+                      {loginError}
+                    </p>
+                  ) : null}
+
                   {loginFields.map((field) => (
                     <AuthField
                       key={field.id}
@@ -199,6 +169,8 @@ export function LoginPage() {
 
                   <Button
                     type="submit"
+                    disabled={loginSubmitting}
+                    aria-busy={loginSubmitting}
                     className="type-body h-12 w-full bg-[#070224] font-semibold hover:bg-[#161038]"
                   >
                     <Fish className="size-4" />
@@ -208,7 +180,13 @@ export function LoginPage() {
               </TabsContent>
 
               <TabsContent value="register">
-                <form className="space-y-5" noValidate onSubmit={registerForm.handleSubmit(handleRegisterSubmit)}>
+                <form className="space-y-5" noValidate onSubmit={handleRegisterSubmit}>
+                  {registerError ? (
+                    <p role="alert" className="type-caption rounded-md border border-red-200 bg-red-50 px-3 py-2 font-medium text-red-700">
+                      {registerError}
+                    </p>
+                  ) : null}
+
                   {registerFields.map((field) => (
                     <AuthField
                       key={field.id}
@@ -220,6 +198,8 @@ export function LoginPage() {
 
                   <Button
                     type="submit"
+                    disabled={registerSubmitting}
+                    aria-busy={registerSubmitting}
                     className="type-body h-12 w-full bg-[#070224] font-semibold hover:bg-[#161038]"
                   >
                     <UserPlus className="size-4" />
