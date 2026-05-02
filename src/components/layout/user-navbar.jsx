@@ -1,4 +1,4 @@
-import { ChevronDown, LogIn, LogOut, Settings, ShieldCheck, UserRound } from "lucide-react"
+import { ChevronDown, LogIn, LogOut, Settings, ShieldCheck, UserRound, History } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -52,6 +52,15 @@ export function UserNavbar() {
           <p className="type-caption font-semibold text-slate-900">{user.username}</p>
           <p className="truncate text-xs text-slate-500">{user.email}</p>
         </div>
+
+        <Link
+          to="/history"
+          className="type-caption mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 font-semibold text-slate-600 outline-none transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50"
+          aria-label="Historia wyszukiwań"
+        >
+          <History className="size-4" />
+          Historia zapytań
+        </Link>
 
         {canAccessAdmin ? (
           <Link

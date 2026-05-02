@@ -4,12 +4,14 @@ import { StaffSuperuserMiddleware } from "@/components/staff-superuser-middlewar
 import { AdminPage } from "@/pages/admin-page"
 import { HomePage } from "@/pages/home-page"
 import { LoginPage } from "@/pages/login-page"
+import { HistoryPage } from "@/pages/history-page"
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/history" element={<HistoryPage />} />
       <Route
         path="/admin"
         element={
