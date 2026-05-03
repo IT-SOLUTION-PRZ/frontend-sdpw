@@ -101,9 +101,9 @@
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
+    --background: oklch(0.18 0.08 275);
     --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
+    --card: oklch(0.22 0.07 275);
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
@@ -144,6 +144,51 @@
   html {
     @apply font-sans;
     }
+
+  .dark h1, .dark h2, .dark h3, .dark p, .dark span, .dark label, .dark div {
+    background-color: transparent !important;
+    color: var(--foreground) !important;
+  }
+
+  .dark header, 
+  .dark nav, 
+  .dark [data-slot="header"] {
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important; 
+    border-radius: var(--radius) !important;   
+    margin-top: 1rem; 
+  }
+
+  .dark button[type="submit"], 
+  .dark .bg-primary {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    opacity: 1 !important;
+  }
+  
+  .dark button[type="submit"] *, 
+  .dark .bg-primary * {
+    color: var(--primary-foreground) !important;
+  }
+
+  .dark body, .dark #root, .dark main {
+    background-color: var(--background) !important;
+  }
+
+  .dark .card, .dark [data-slot="card"] {
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important;
+  }
+
+  .dark input, .dark select, .dark [role="combobox"], .dark [data-slot="select-trigger"] {
+    background-color: var(--input) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--foreground) !important;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
 }
 
 @layer components {
