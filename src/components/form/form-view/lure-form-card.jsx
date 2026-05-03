@@ -19,6 +19,7 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(lureFormSchema),
@@ -27,7 +28,7 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
       ...initialValues,
     },
   })
-
+  
   const onSubmit = async (values) => {
     const selectedLabels = dynamicFields.reduce((acc, field) => {
       const selectedValue = values[field.id]
