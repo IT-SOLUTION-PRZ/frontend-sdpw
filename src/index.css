@@ -145,50 +145,71 @@
     @apply font-sans;
     }
 
-  .dark h1, .dark h2, .dark h3, .dark p, .dark span, .dark label, .dark div {
-    background-color: transparent !important;
-    color: var(--foreground) !important;
-  }
-
-  .dark header, 
-  .dark nav, 
-  .dark [data-slot="header"] {
-    background-color: var(--card) !important;
-    border: 1px solid var(--border) !important; 
-    border-radius: var(--radius) !important;   
-    margin-top: 1rem; 
-  }
-
-  .dark button[type="submit"], 
-  .dark .bg-primary {
-    background-color: var(--primary) !important;
-    color: var(--primary-foreground) !important;
-    opacity: 1 !important;
-  }
-  
-  .dark button[type="submit"] *, 
-  .dark .bg-primary * {
-    color: var(--primary-foreground) !important;
-  }
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
 
   .dark body, .dark #root, .dark main {
-    background-color: var(--background) !important;
+    background-color: #0f172a !important;
   }
 
-  .dark .card, .dark [data-slot="card"] {
-    background-color: var(--card) !important;
-    border: 1px solid var(--border) !important;
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark p, 
+  .dark span, .dark label, .dark div {
+    color: #ffffff !important;
   }
 
-  .dark input, .dark select, .dark [role="combobox"], .dark [data-slot="select-trigger"] {
-    background-color: var(--input) !important;
-    border: 1px solid var(--border) !important;
-    color: var(--foreground) !important;
+  .dark .text-muted-foreground, 
+  .dark .text-slate-500,
+  .dark .text-sm.opacity-70 {
+    color: #ffffff !important;
+    opacity: 0.9 !important; 
   }
 
-  .dark {
-    color-scheme: dark;
+  .dark button.variant-outline,
+  .dark button:has(svg[class*="refresh"]) {
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
   }
+
+  .dark .bg-slate-900, 
+  .dark button:has(svg[class*="file-text"]) {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #ffffff !important;
+  }
+  
+  .dark button:has(svg[class*="file-text"]) svg {
+    stroke: #ffffff !important;
+  }
+
+  .dark .grid > div, 
+  .dark [class*="bg-white"] {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+  }
+
+  .dark .text-slate-900, 
+  .dark .text-gray-900 {
+    color: #ffffff !important;
+  }
+
+  .dark .text-slate-200, .dark .text-gray-200 {
+    color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .dark select, .dark input, .dark [role="combobox"] {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+  }
+
+  .dark button[type="submit"], .dark .bg-primary {
+    background-color: #ffffff !important;
+    color: #020617 !important;
+    font-weight: bold !important;
+  }
+
+  .dark { color-scheme: dark; }
 }
 
 @layer components {
