@@ -19,6 +19,7 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(lureFormSchema),
@@ -27,7 +28,7 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
       ...initialValues,
     },
   })
-
+  
   const onSubmit = async (values) => {
     const selectedLabels = dynamicFields.reduce((acc, field) => {
       const selectedValue = values[field.id]
@@ -55,7 +56,7 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
     return (
       <FormCardContainer>
         <CardContent className="space-y-4 p-6">
-          <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          <p className="type-body rounded-xl border border-red-200 bg-red-50 px-4 py-3 font-medium text-red-700">
             {fetchError}
           </p>
           <Button type="button" variant="outline" onClick={retry} disabled={loading} className="w-full">
@@ -70,8 +71,8 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
     return (
       <FormCardContainer>
         <CardHeader className="pb-4">
-          <CardTitle className="text-2xl text-slate-900">Dobór przynęty</CardTitle>
-          <CardDescription>Przygotowujemy formularz...</CardDescription>
+          <CardTitle className="type-title text-slate-900">Dobór przynęty</CardTitle>
+          <CardDescription className="type-body">Przygotowujemy formularz...</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-5">
@@ -102,8 +103,8 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
   return (
     <FormCardContainer>
       <CardHeader className="pb-4">
-        <CardTitle className="text-2xl text-slate-900">Dobór przynęty</CardTitle>
-        <CardDescription>Wybierz parametry połowu</CardDescription>
+        <CardTitle className="type-title text-slate-900">Dobór przynęty</CardTitle>
+        <CardDescription className="type-body">Wybierz parametry połowu</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -126,7 +127,7 @@ export function LureFormCard({ onSubmitSuccess, onSubmitStart, initialValues }) 
               Boolean(fetchError) ||
               dynamicFields.every((f) => f.options.length === 0)
             }
-            className="mt-1 h-12 w-full bg-[#070224] text-base font-semibold hover:bg-[#161038]"
+            className="type-body mt-1 h-12 w-full bg-[#070224] font-semibold hover:bg-[#161038]"
           >
             <Fish className="mr-2 size-4" />
             {isSubmitting || recommendationLoading ? "Analizowanie..." : "Znajdź przynętę"}

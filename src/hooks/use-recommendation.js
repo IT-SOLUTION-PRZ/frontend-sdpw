@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react"
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || ""
+import { API_BASE_URL } from "@/lib/api-config"
+import { authFetch } from "@/lib/auth-fetch"
+
 const RECOMMEND_URL = `${API_BASE_URL}/api/v1/recommend/`
 
 async function parseResponseJson(response) {
@@ -20,9 +22,8 @@ export function useRecommendation() {
     setError("")
 
     try {
-      const response = await fetch(RECOMMEND_URL, {
+      const response = await authFetch(RECOMMEND_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
 
