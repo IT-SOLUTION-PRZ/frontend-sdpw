@@ -41,6 +41,26 @@ export function RecommendedBaitCard({ result }) {
     }
   }
 
+  async function addFavourite(rec) {
+    var nazwa = prompt("Podaj nazwe do zapisu");
+    try {
+      const res = await authFetch(`${API_BASE_URL}/api/v1/favourite/set/`, {
+        method: "POST",
+        body: JSON.stringify({
+          id: rec.id,
+          name: nazwa
+        }),
+      });
+      if (res.ok) {
+        alert("dodano do ulubionych :3")
+      } else {
+        alert("Wystąpił błąd podczas zapisu do ulubionych (odmowa serwera)");
+      }
+    } catch (e) {
+      alert("Wystąpił błąd: " + e)
+    }
+  }
+
   return (
     <FormCardContainer className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
       <div className="border-b border-slate-200 bg-slate-50/70 px-7 py-6">
@@ -66,6 +86,7 @@ export function RecommendedBaitCard({ result }) {
               key={rec?.id ?? index}
               className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
             >
+              <button onClick={() => addFavourite(rec)}>dodaj do ulubionych</button>
               <div className="flex items-start gap-4">
                 <div className="type-caption flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500 font-bold text-white">
                   {index + 1}
