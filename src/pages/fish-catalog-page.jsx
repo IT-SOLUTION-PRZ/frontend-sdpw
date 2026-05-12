@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
-import { useTopsStatistics } from "@/hooks/use-tops-statistics"
+import { TopStatisticBanner } from "@/components/catalog/top-statistic-banner"
+import { useTopFish } from "@/hooks/use-tops-statistics"
 
 export function FishCatalogPage() {
   const [fishList, setFishList] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
-  const { topFish } = useTopsStatistics()
+  const topFish = useTopFish()
 
   useEffect(() => {
     const fetchFish = async () => {
@@ -64,27 +65,13 @@ export function FishCatalogPage() {
             />
           </div>
         </header>
-        {topFish && (
-          <Link
-            to={`/katalog-ryb/${topFish.id}`}
-            className="flex flex-col gap-3 rounded-2xl border border-indigo-100 bg-white/80 px-5 py-4 shadow-sm transition hover:border-indigo-200 hover:bg-white sm:flex-row sm:items-center sm:justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
-                <Trophy className="size-5" />
-              </span>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-indigo-600">
-                  Najczęściej wybierana ryba
-                </p>
-                <p className="text-lg font-extrabold text-slate-900">{topFish.name}</p>
-              </div>
-            </div>
-            <span className="text-sm font-semibold text-slate-500">
-              {topFish.search_count} wyszukiwań
-            </span>
-          </Link>
-        )}
+        <TopStatisticBanner
+          icon={Trophy}
+          label="Najczęściej wybierana ryba"
+          name={topFish?.name}
+          to={topFish ? `/katalog-ryb/${topFish.id}` : ""}
+          countText={`${topFish?.search_count ?? 0} wyszukiwań`}
+        />
         {loading ? (
           // Ekran ładowania
           <div className="flex flex-1 items-center justify-center text-slate-500 animate-pulse font-medium">

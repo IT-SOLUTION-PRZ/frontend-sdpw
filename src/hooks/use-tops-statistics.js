@@ -15,40 +15,40 @@ async function fetchTopStatistic(url) {
   return response.json()
 }
 
-export function useTopsStatistics() {
-  const [topFish, setTopFish] = useState(null)
-  const [topBait, setTopBait] = useState(null)
+function useTopStatistic(url, errorMessage) {
+  const [topStatistic, setTopStatistic] = useState(null)
 
   useEffect(() => {
     let isMounted = true
 
-    const fetchTops = async () => {
+    const fetchTop = async () => {
       try {
-        const [fish, bait] = await Promise.all([
-          fetchTopStatistic(TOP_FISH_URL),
-          fetchTopStatistic(TOP_BAIT_URL),
-        ])
+        const statistic = await fetchTopStatistic(url)
 
         if (!isMounted) {
           return
         }
 
-        setTopFish(fish)
-        setTopBait(bait)
+        setTopStatistic(statistic)
       } catch (error) {
-        console.error("Błąd podczas pobierania najczęściej wybieranych pozycji:", error)
+        console.error(errorMessage, error)
       }
     }
 
-    fetchTops()
+    fetchTop()
 
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [errorMessage, url])
 
-  return {
-    topFish,
-    topBait,
-  }
+  return topStatistic
+}
+
+export function useTopFish() {
+  return useTopStatistic(TOP_FISH_URL, "Błąd podczas pobierania najczęściej wybieranej ryby:")
+}
+
+export function useTopBait() {
+  return useTopStatistic(TOP_BAIT_URL, "Błąd podczas pobierania najczęściej wybieranej przynęty:")
 }
