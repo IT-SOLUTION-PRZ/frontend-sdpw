@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { Search, ArrowLeft, Bug } from "lucide-react"
+import { Search, ArrowLeft, Bug, Trophy } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
+import { TopStatisticBanner } from "@/components/catalog/top-statistic-banner"
+import { useTopBait } from "@/hooks/use-tops-statistics"
 
 export function BaitCatalogPage() {
   const [baitList, setBaitList] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const topBait = useTopBait()
 
   useEffect(() => {
     const fetchBaits = async () => {
@@ -61,6 +64,14 @@ export function BaitCatalogPage() {
             />
           </div>
         </header>
+
+        <TopStatisticBanner
+          icon={Trophy}
+          label="Najczęściej wybierana przynęta"
+          name={topBait?.name}
+          to={topBait ? `/katalog-przynet/${topBait.id}` : ""}
+          countText={`${topBait?.recommendation_count ?? 0} rekomendacji`}
+        />
 
         {loading ? (
           <div className="flex flex-1 items-center justify-center text-slate-500 animate-pulse font-medium">

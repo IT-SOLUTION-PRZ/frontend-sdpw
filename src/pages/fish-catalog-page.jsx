@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { Search, ArrowLeft, Fish } from "lucide-react"
+import { Search, ArrowLeft, Fish, Trophy } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
+import { TopStatisticBanner } from "@/components/catalog/top-statistic-banner"
+import { useTopFish } from "@/hooks/use-tops-statistics"
 
 export function FishCatalogPage() {
   const [fishList, setFishList] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const topFish = useTopFish()
+
   useEffect(() => {
     const fetchFish = async () => {
       try {
@@ -61,6 +65,13 @@ export function FishCatalogPage() {
             />
           </div>
         </header>
+        <TopStatisticBanner
+          icon={Trophy}
+          label="Najczęściej wybierana ryba"
+          name={topFish?.name}
+          to={topFish ? `/katalog-ryb/${topFish.id}` : ""}
+          countText={`${topFish?.search_count ?? 0} wyszukiwań`}
+        />
         {loading ? (
           // Ekran ładowania
           <div className="flex flex-1 items-center justify-center text-slate-500 animate-pulse font-medium">
