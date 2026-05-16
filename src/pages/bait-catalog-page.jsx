@@ -1,21 +1,26 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { Search, ArrowLeft, Bug } from "lucide-react"
-
+import { Search, ArrowLeft, Bug, Trophy, SlidersHorizontal, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
+import { TopStatisticBanner } from "@/components/catalog/top-statistic-banner"
+import { useTopBait } from "@/hooks/use-tops-statistics"
 
 export function BaitCatalogPage() {
   const [baitList, setBaitList] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const [producerId, setProducerId] = useState("")
+  const [sortOrder, setSortOrder] = useState("name")
+  const topBait = useTopBait()
 
   useEffect(() => {
     const fetchBaits = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/baits/`)
+        setLoading(true)
+        const response = await fetch(`${API_BASE_URL}/api/v1/baits/?producer=${producerId}&ordering=${sortOrder}`)
         if (response.ok) {
           const data = await response.json()
           setBaitList(data)
@@ -28,7 +33,7 @@ export function BaitCatalogPage() {
     }
 
     fetchBaits()
-  }, [])
+  }, [producerId, sortOrder])
 
   const filteredBaits = baitList.filter((bait) =>
     bait.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -61,6 +66,55 @@ export function BaitCatalogPage() {
             />
           </div>
         </header>
+
+        <section className="flex flex-col sm:flex-row items-center gap-4 rounded-2xl border border-slate-200/80 bg-white/60 p-4 shadow-sm backdrop-blur-xs">
+          <div className="flex w-full sm:w-auto items-center gap-2 text-sm font-semibold text-slate-700">
+            <SlidersHorizontal className="size-4 text-slate-500" />
+            <span>Filtruj listę:</span>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4 w-full sm:flex sm:w-auto flex-1 justify-start">
+            <div className="relative w-full sm:w-48">
+              <select
+                value={producerId}
+                onChange={(e) => setProducerId(e.target.value)}
+                className="w-full appearance-none h-9 rounded-full border border-slate-200 bg-white px-4 pr-8 text-sm font-medium text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer"
+              >
+                <option value="">Wszyscy producenci</option>
+                <option value="1">Savage Gear</option>
+                <option value="2">Salmo</option>
+                <option value="3">Rapala</option>
+                <option value="4">Mepps</option>
+                <option value="5">Keitech</option>
+                <option value="6">Westin</option>
+                <option value="7">Jaxon</option>
+                <option value="8">Daiwa</option>
+                <option value="9">Berkley</option>
+              </select>
+              <SlidersHorizontal className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
+            </div>
+
+            <div className="relative w-full sm:w-48">
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="w-full appearance-none h-9 rounded-full border border-slate-200 bg-white px-4 pr-8 text-sm font-medium text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer"
+              >
+                <option value="name">Nazwa: A do Z</option>
+                <option value="-name">Nazwa: Z do A</option>
+              </select>
+              <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
+            </div>
+          </div>
+        </section>
+
+        <TopStatisticBanner
+          icon={Trophy}
+          label="Najczęściej wybierana przynęta"
+          name={topBait?.name}
+          to={topBait ? `/katalog-przynet/${topBait.id}` : ""}
+          countText={`${topBait?.recommendation_count ?? 0} rekomendacji`}
+        />
 
         {loading ? (
           <div className="flex flex-1 items-center justify-center text-slate-500 animate-pulse font-medium">

@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { Search, ArrowLeft, Fish } from "lucide-react"
+import { Search, ArrowLeft, Fish, Trophy , SlidersHorizontal, ArrowUpDown} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
+import { TopStatisticBanner } from "@/components/catalog/top-statistic-banner"
+import { useTopFish } from "@/hooks/use-tops-statistics"
 
 export function FishCatalogPage() {
   const [fishList, setFishList] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isPredator, setIsPredator] = useState("") 
+  const [sortOrder, setSortOrder] = useState("name")
+
+  const topFish = useTopFish()
+
   useEffect(() => {
     const fetchFish = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/fish/`)
+        setLoading(true)
+        const response = await fetch(`${API_BASE_URL}/api/v1/fish/?is_predator=${isPredator}&ordering=${sortOrder}`)
         if (response.ok) {
           const data = await response.json()
           setFishList(data) 
@@ -27,7 +35,7 @@ export function FishCatalogPage() {
     }
 
     fetchFish()
-  }, [])
+  }, [isPredator, sortOrder])
   const filteredFish = fishList.filter((fish) =>
     fish.name?.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -61,6 +69,48 @@ export function FishCatalogPage() {
             />
           </div>
         </header>
+
+        <section className="flex flex-col sm:flex-row items-center gap-4 rounded-2xl border border-slate-200/80 bg-white/60 p-4 shadow-sm backdrop-blur-xs">
+          <div className="flex w-full sm:w-auto items-center gap-2 text-sm font-semibold text-slate-700">
+            <SlidersHorizontal className="size-4 text-slate-500" />
+            <span>Filtruj listę:</span>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4 w-full sm:flex sm:w-auto flex-1 justify-start">
+            <div className="relative w-full sm:w-48">
+              <select
+                value={isPredator}
+                onChange={(e) => setIsPredator(e.target.value)}
+                className="w-full appearance-none h-9 rounded-full border border-slate-200 bg-white px-4 pr-8 text-sm font-medium text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer"
+              >
+                <option value="">Wszystkie ryby</option>
+                <option value="true">Tylko drapieżne</option>
+                <option value="false">Spokojnego żeru</option>
+              </select>
+              <SlidersHorizontal className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
+            </div>
+
+            <div className="relative w-full sm:w-48">
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="w-full appearance-none h-9 rounded-full border border-slate-200 bg-white px-4 pr-8 text-sm font-medium text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer"
+              >
+                <option value="name">Nazwa: A do Z</option>
+                <option value="-name">Nazwa: Z do A</option>
+              </select>
+              <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
+            </div>
+          </div>
+        </section>
+
+        <TopStatisticBanner
+          icon={Trophy}
+          label="Najczęściej wybierana ryba"
+          name={topFish?.name}
+          to={topFish ? `/katalog-ryb/${topFish.id}` : ""}
+          countText={`${topFish?.search_count ?? 0} wyszukiwań`}
+        />
         {loading ? (
           // Ekran ładowania
           <div className="flex flex-1 items-center justify-center text-slate-500 animate-pulse font-medium">
