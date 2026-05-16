@@ -1,5 +1,5 @@
 import { ChevronDown, LogIn, LogOut, Settings, ShieldCheck, UserRound, History, Fish, BookOpen } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { useCurrentUser } from "@/hooks/use-current-user"
@@ -7,6 +7,13 @@ import { hasStaffSuperuserAccess } from "@/lib/has-staff-superuser-access"
 
 export function UserNavbar() {
   const { user, loading, logout } = useCurrentUser()
+  const navigate = useNavigate() 
+
+  const handleLogout = async () => {
+    await logout() // 1. Najpierw czyścimy tokeny
+    navigate("/")  // 2. Przenosimy usera na stronę główną
+    window.location.reload()
+  }
 
   if (loading) {
     return (
@@ -101,7 +108,7 @@ export function UserNavbar() {
 
         <button
           type="button"
-          onClick={logout}
+          onClick={handleLogout}
           className="type-caption flex w-full items-center gap-2 rounded-xl px-3 py-2 font-semibold text-red-600 outline-none transition-colors hover:bg-red-50 focus-visible:ring-3 focus-visible:ring-red-200"
         >
           <LogOut className="size-4" />
