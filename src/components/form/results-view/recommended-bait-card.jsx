@@ -1,5 +1,5 @@
 import { useState } from "react" 
-import { Fish, ThumbsUp, ThumbsDown } from "lucide-react" 
+import { Fish, ThumbsUp, ThumbsDown, Heart } from "lucide-react" 
 import { toast } from "sonner" 
 import { FormCardContainer } from "@/components/form/form-card-container"
 import { CardContent } from "@/components/ui/card"
@@ -43,9 +43,18 @@ export function RecommendedBaitCard({ result }) {
   }
 
   async function addFavourite(rec) {
-    var nazwa = prompt("Podaj nazwe do zapisu");
+    if (!isAuthenticated) {
+      toast.error("Musisz być zalogowany, aby dodać do ulubionych.");
+      return;
+    }
+
+    const nazwa = prompt("Podaj nazwę do zapisu (np. 'Szczupak na wiosnę'):");
+    
+    // Jeśli użytkownik anulował prompt, nie wysyłamy zapytania
+    if (!nazwa) return;
+
     try {
-      const res = await authFetch(`${API_BASE_URL}/api/v1/favourite/set/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/v1/favorite/set/`, {
         method: "POST",
         body: JSON.stringify({
           id: rec.id,
@@ -53,12 +62,12 @@ export function RecommendedBaitCard({ result }) {
         }),
       });
       if (res.ok) {
-        alert("dodano do ulubionych :3")
+        toast.success("Dodano do ulubionych!");
       } else {
-        alert("Wystąpił błąd podczas zapisu do ulubionych (odmowa serwera)");
+        toast.error("Wystąpił błąd podczas zapisu do ulubionych.");
       }
     } catch (e) {
-      alert("Wystąpił błąd: " + e)
+      toast.error("Wystąpił błąd połączenia z serwerem.");
     }
   }
 
@@ -85,25 +94,37 @@ export function RecommendedBaitCard({ result }) {
           return (
             <article
               key={rec?.id ?? index}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md"
             >
-
               
-              <div className="flex items-start gap-4">
-                <div className="type-caption flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500 font-bold text-white">
-                  {index + 1}
-                </div>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="type-caption flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500 font-bold text-white">
+                    {index + 1}
+                  </div>
 
-                <div className="min-w-0">
-                  <h3 className="type-title text-slate-900">
-                    {bait.name || "Nieznana przynęta"}
-                  </h3>
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <span className="type-caption rounded-full bg-blue-100 px-3 py-1 font-semibold text-blue-800">
-                      {bait.producer_name || "Nieznany producent"}
-                    </span>
+                  <div className="min-w-0">
+                    <h3 className="type-title text-slate-900">
+                      {bait.name || "Nieznana przynęta"}
+                    </h3>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className="type-caption rounded-full bg-blue-100 px-3 py-1 font-semibold text-blue-800">
+                        {bait.producer_name || "Nieznany producent"}
+                      </span>
+                    </div>
                   </div>
                 </div>
+
+                {/* Przycisk dodawania do ulubionych (tylko dla zalogowanych) */}
+                {isAuthenticated && (
+                  <button
+                    onClick={() => addFavourite(rec)}
+                    className="group flex size-9 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-colors duration-200 hover:bg-rose-50 hover:text-rose-500"
+                    title="Dodaj do ulubionych"
+                  >
+                    <Heart className="size-4 transition-transform group-hover:scale-110" />
+                  </button>
+                )}
               </div>
 
               <p className="type-body mt-4 text-slate-700">
@@ -124,7 +145,7 @@ export function RecommendedBaitCard({ result }) {
                 </div>
               )}
               
-              {/* Ukrycie sekcji głosowania dla gości */}
+              {/* Sekcja głosowania dla zalogowanych */}
               {historyId && isAuthenticated && (
                 <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                   <span className="text-sm font-medium text-slate-500">
