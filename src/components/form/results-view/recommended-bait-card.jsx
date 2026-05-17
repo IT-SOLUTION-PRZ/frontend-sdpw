@@ -5,6 +5,7 @@ import { FormCardContainer } from "@/components/form/form-card-container"
 import { CardContent } from "@/components/ui/card"
 import { authFetch } from "@/lib/auth-fetch"
 import { API_BASE_URL } from "@/lib/api-config"
+import { getAccessToken } from "@/lib/auth-storage"
 
 export function RecommendedBaitCard({ result }) {
   let recommendations;
@@ -19,7 +20,8 @@ export function RecommendedBaitCard({ result }) {
 
   const count = recommendations.length
   const [votes, setVotes] = useState({})
-
+  const isAuthenticated = !!getAccessToken();
+  
   const handleVote = async (historyId, ratingValue) => {
     if (!historyId) return
 
@@ -32,12 +34,31 @@ export function RecommendedBaitCard({ result }) {
       if (res.ok) {
         setVotes((prev) => ({ ...prev, [historyId]: ratingValue }))
         toast.success("Dziękujemy za Twoją opinię!")
-
       } else {
         toast.error("Nie udało się zapisać oceny.")
       }
     } catch (e) {
       toast.error("Wystąpił błąd podczas wysyłania opinii.")
+    }
+  }
+
+  async function addFavourite(rec) {
+    var nazwa = prompt("Podaj nazwe do zapisu");
+    try {
+      const res = await authFetch(`${API_BASE_URL}/api/v1/favourite/set/`, {
+        method: "POST",
+        body: JSON.stringify({
+          id: rec.id,
+          name: nazwa
+        }),
+      });
+      if (res.ok) {
+        alert("dodano do ulubionych :3")
+      } else {
+        alert("Wystąpił błąd podczas zapisu do ulubionych (odmowa serwera)");
+      }
+    } catch (e) {
+      alert("Wystąpił błąd: " + e)
     }
   }
 
@@ -66,6 +87,8 @@ export function RecommendedBaitCard({ result }) {
               key={rec?.id ?? index}
               className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
             >
+
+              
               <div className="flex items-start gap-4">
                 <div className="type-caption flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500 font-bold text-white">
                   {index + 1}
@@ -101,14 +124,15 @@ export function RecommendedBaitCard({ result }) {
                   </p>
                 </div>
               )}
-              {historyId && (
+              
+              {/* Ukrycie sekcji głosowania dla gości */}
+              {historyId && isAuthenticated && (
                 <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                   <span className="text-sm font-medium text-slate-500">
                     Czy ta rekomendacja była trafna?
                   </span>
                   
                   <div className="flex items-center gap-2">
-                    {}
                     <button
                       onClick={() => handleVote(historyId, 1)}
                       disabled={currentVote !== undefined} 
@@ -124,7 +148,6 @@ export function RecommendedBaitCard({ result }) {
                       <ThumbsUp className="size-4" />
                     </button>
                     
-                    {}
                     <button
                       onClick={() => handleVote(historyId, -1)}
                       disabled={currentVote !== undefined} 
