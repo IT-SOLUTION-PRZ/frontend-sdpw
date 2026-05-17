@@ -28,6 +28,12 @@ export function FishingConditionsCard({ onBack, selectedLabels }) {
       icon: Waves,
     },
     {
+      id: "season_id",
+      title: "Sezon",
+      value: selectedLabels?.season_id || "Brak danych",
+      icon: CalendarDays,
+    },
+    {
       id: "time_of_day_id",
       title: "Pora dnia",
       value: selectedLabels?.time_of_day_id || "Brak danych",
@@ -38,12 +44,6 @@ export function FishingConditionsCard({ onBack, selectedLabels }) {
       title: "Przejrzystość",
       value: selectedLabels?.water_clarity_id || "Brak danych",
       icon: Droplets,
-    },
-    {
-      id: "season_id",
-      title: "Sezon",
-      value: selectedLabels?.season_id || "Brak danych",
-      icon: CalendarDays,
     },
     {
       id: "water_temperature_id",
@@ -79,7 +79,8 @@ export function FishingConditionsCard({ onBack, selectedLabels }) {
                   <TileIcon className="size-5 shrink-0 text-indigo-500" />
                   <div className="min-w-0">
                     <p className="type-caption truncate font-medium text-slate-500">{tile.title}</p>
-                    <p className="type-body mt-2 truncate font-semibold text-slate-900">{tile.value}</p>
+                    {/* Usunięto klasę truncate – teraz długi tekst się zawinie */}
+                    <p className="type-body mt-2 font-semibold text-slate-900">{tile.value}</p>
                   </div>
                 </div>
               </div>
