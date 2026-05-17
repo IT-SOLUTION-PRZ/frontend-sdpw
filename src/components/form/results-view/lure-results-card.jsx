@@ -19,8 +19,10 @@ export function LureResultsCard({ onBack, result, selectedLabels, isLoading = fa
     const pageWidth = doc.internal.pageSize.getWidth()
 
     const removeAccents = (str) => {
-      if (typeof str !== 'string') return str
+      if (!str) return ""
+      if (typeof str !== 'string') return String(str)
       return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/ł/g, "l").replace(/Ł/g, "L")
         .replace(/ł/g, "l").replace(/Ł/g, "L")
     }
 
@@ -64,27 +66,24 @@ export function LureResultsCard({ onBack, result, selectedLabels, isLoading = fa
     doc.setFont("helvetica", "normal")
     doc.setFontSize(12)
 
-    const bait = result?.bait_details
+    // KULOOPORNE WYCIĄGANIE DANYCH O PRZYNĘCIE:
+    // Sprawdza po kolei: result.bait_details -> result.bait -> sam result
+    const bait = result?.bait_details || result?.bait || result;
 
-    if (!bait) {
-      console.warn("Brak szczegółów przynęty do raportu")
-      return
-    }
-
-    const nameTxt = `Przyneta: ${bait.name || "Nieznana przyneta"}`
+    const nameTxt = `Przyneta: ${bait?.name || result?.bait_name || "Nieznana przyneta"}`
     doc.text(removeAccents(nameTxt), 20, y)
     y += 8
 
-    const prodTxt = `Producent: ${bait.producer_name || "Nieznany producent"}`
+    const prodTxt = `Producent: ${bait?.producer_name || bait?.producer || "Nieznany producent"}`
     doc.text(removeAccents(prodTxt), 20, y)
     y += 8
 
-    const descTxt = `Opis: ${bait.description || "Brak opisu przynety."}`
+    const descTxt = `Opis: ${bait?.description || "Brak opisu przynety."}`
     const splitDesc = doc.splitTextToSize(removeAccents(descTxt), pageWidth - 40)
     doc.text(splitDesc, 20, y)
     y += (splitDesc.length * 7) + 2
 
-    const tipsTxt = `Wskazowki uzycia: ${bait.usage_tips || "Brak wskazowek uzycia."}`
+    const tipsTxt = `Wskazowki uzycia: ${bait?.usage_tips || "Brak wskazowek uzycia."}`
     const splitTips = doc.splitTextToSize(removeAccents(tipsTxt), pageWidth - 40)
     doc.text(splitTips, 20, y)
 
