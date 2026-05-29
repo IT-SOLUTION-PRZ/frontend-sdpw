@@ -1,4 +1,4 @@
-import { ChevronDown, LogIn, LogOut, Settings, ShieldCheck, UserRound, History, Fish, BookOpen } from "lucide-react"
+import { ChevronDown, LogIn, LogOut, Settings, ShieldCheck, UserRound, History, Fish, BookOpen, Heart } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -42,6 +42,18 @@ export function UserNavbar() {
   const canAccessAdmin = hasStaffSuperuserAccess(user)
 
   return (
+    <div className="flex items-center gap-2">
+      <Button
+        asChild
+        variant="outline"
+        className="type-caption h-11 rounded-full border-rose-200/80 bg-gradient-to-r from-rose-50 to-white px-3.5 font-semibold text-rose-700 shadow-sm transition-all hover:border-rose-300 hover:from-rose-100 hover:to-rose-50 hover:text-rose-800 hover:shadow-md"
+      >
+        <Link to="/favorites" aria-label="Przejdź do ulubionych rekomendacji">
+          <Heart className="size-4 fill-rose-500/20 text-rose-600" />
+          <span className="hidden sm:inline">Ulubione</span>
+        </Link>
+      </Button>
+
     <details className="group relative">
       <summary
         className="type-caption flex h-11 w-fit max-w-36 cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-2 pr-2.5 font-semibold text-slate-700 shadow-sm outline-none transition-colors hover:bg-white hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50 sm:max-w-44 [&::-webkit-details-marker]:hidden"
@@ -77,8 +89,17 @@ export function UserNavbar() {
         </div>
 
         <Link
+          to="/favorites"
+          className="type-caption mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 font-semibold text-rose-700 outline-none transition-colors hover:bg-rose-50 hover:text-rose-900 focus-visible:ring-3 focus-visible:ring-rose-200/50"
+          aria-label="Ulubione rekomendacje"
+        >
+          <Heart className="size-4 fill-rose-500/20" />
+          Ulubione
+        </Link>
+
+        <Link
           to="/history"
-          className="type-caption mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 font-semibold text-slate-600 outline-none transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="type-caption mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 font-semibold text-slate-600 outline-none transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-3 focus-visible:ring-ring/50"
           aria-label="Historia wyszukiwań"
         >
           <History className="size-4" />
@@ -116,5 +137,6 @@ export function UserNavbar() {
         </button>
       </div>
     </details>
+    </div>
   )
 }

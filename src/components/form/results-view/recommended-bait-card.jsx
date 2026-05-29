@@ -3,11 +3,15 @@ import { Fish, ThumbsUp, ThumbsDown, Heart } from "lucide-react"
 import { toast } from "sonner" 
 import { FormCardContainer } from "@/components/form/form-card-container"
 import { CardContent } from "@/components/ui/card"
+import {
+  SaveFavoriteDialog,
+  buildFavoriteSetName,
+} from "@/components/form/results-view/save-favorite-dialog"
 import { authFetch } from "@/lib/auth-fetch"
 import { API_BASE_URL } from "@/lib/api-config"
 import { getAccessToken } from "@/lib/auth-storage"
 
-export function RecommendedBaitCard({ result }) {
+export function RecommendedBaitCard({ result, selectedLabels }) {
   let recommendations;
 
   if (Array.isArray(result)) {
@@ -20,7 +24,10 @@ export function RecommendedBaitCard({ result }) {
 
   const count = recommendations.length
   const [votes, setVotes] = useState({})
-  const isAuthenticated = !!getAccessToken();
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false)
+  const [pendingRec, setPendingRec] = useState(null)
+  const [isSavingFavorite, setIsSavingFavorite] = useState(false)
+  const isAuthenticated = !!getAccessToken()
   
   const handleVote = async (historyId, ratingValue) => {
     if (!historyId) return
@@ -42,34 +49,44 @@ export function RecommendedBaitCard({ result }) {
     }
   }
 
-  async function addFavourite(rec) {
+  function openSaveDialog(rec) {
     if (!isAuthenticated) {
-      toast.error("Musisz być zalogowany, aby dodać do ulubionych.");
-      return;
+      toast.error("Musisz być zalogowany, aby dodać do ulubionych.")
+      return
+    }
+    setPendingRec(rec)
+    setSaveDialogOpen(true)
+  }
+
+  async function confirmSaveFavorite(name) {
+    if (!pendingRec) {
+      return
     }
 
-    const nazwa = prompt("Podaj nazwę do zapisu (np. 'Szczupak na wiosnę'):");
-    
-    // Jeśli użytkownik anulował prompt, nie wysyłamy zapytania
-    if (!nazwa) return;
-
+    setIsSavingFavorite(true)
     try {
       const res = await authFetch(`${API_BASE_URL}/api/v1/favorite/set/`, {
         method: "POST",
         body: JSON.stringify({
-          id: rec.id,
-          name: nazwa
+          id: pendingRec.rule_id ?? pendingRec.id,
+          name,
         }),
-      });
+      })
       if (res.ok) {
-        toast.success("Dodano do ulubionych!");
+        toast.success("Zapisano w ulubionych!")
+        setSaveDialogOpen(false)
+        setPendingRec(null)
       } else {
-        toast.error("Wystąpił błąd podczas zapisu do ulubionych.");
+        toast.error("Wystąpił błąd podczas zapisu do ulubionych.")
       }
-    } catch (e) {
-      toast.error("Wystąpił błąd połączenia z serwerem.");
+    } catch {
+      toast.error("Wystąpił błąd połączenia z serwerem.")
+    } finally {
+      setIsSavingFavorite(false)
     }
   }
+
+  const pendingBaitName = pendingRec?.bait_details?.name || ""
 
   return (
     <FormCardContainer className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
@@ -111,6 +128,11 @@ export function RecommendedBaitCard({ result }) {
                       <span className="type-caption rounded-full bg-blue-100 px-3 py-1 font-semibold text-blue-800">
                         {bait.producer_name || "Nieznany producent"}
                       </span>
+                      {rec.match_percent != null && (
+                        <span className="type-caption rounded-full bg-emerald-100 px-3 py-1 font-semibold text-emerald-800">
+                          Dopasowanie {rec.match_percent}%
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -118,11 +140,13 @@ export function RecommendedBaitCard({ result }) {
                 {/* Przycisk dodawania do ulubionych (tylko dla zalogowanych) */}
                 {isAuthenticated && (
                   <button
-                    onClick={() => addFavourite(rec)}
-                    className="group flex size-9 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-colors duration-200 hover:bg-rose-50 hover:text-rose-500"
+                    type="button"
+                    onClick={() => openSaveDialog(rec)}
+                    className="group flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-rose-200/80 bg-gradient-to-r from-rose-50 to-white px-3 text-rose-600 shadow-sm transition-all duration-200 hover:border-rose-300 hover:from-rose-100 hover:to-rose-50 hover:text-rose-700 hover:shadow-md"
                     title="Dodaj do ulubionych"
                   >
-                    <Heart className="size-4 transition-transform group-hover:scale-110" />
+                    <Heart className="size-4 fill-rose-500/15 transition-transform group-hover:scale-110 group-hover:fill-rose-500/30" />
+                    <span className="hidden text-xs font-semibold sm:inline">Zapisz</span>
                   </button>
                 )}
               </div>
@@ -189,6 +213,20 @@ export function RecommendedBaitCard({ result }) {
           )
         })}
       </CardContent>
+
+      <SaveFavoriteDialog
+        open={saveDialogOpen}
+        onClose={() => {
+          if (!isSavingFavorite) {
+            setSaveDialogOpen(false)
+            setPendingRec(null)
+          }
+        }}
+        defaultName={buildFavoriteSetName(selectedLabels, pendingBaitName)}
+        baitName={pendingBaitName}
+        onConfirm={confirmSaveFavorite}
+        isSaving={isSavingFavorite}
+      />
     </FormCardContainer>
   )
 }
