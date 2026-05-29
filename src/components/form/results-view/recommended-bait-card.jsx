@@ -160,6 +160,7 @@ export function RecommendedBaitCard({ result, selectedLabels }) {
                 {bait.usage_tips || "Brak wskazówek użycia."}
               </p>
 
+              {/* Wyświetla dodatkowe info, tylko jeśli API je zwróciło */}
               {rec?.additional_info && (
                 <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
                   <p className="type-body mb-2 font-semibold text-slate-900">Dodatkowe informacje</p>
