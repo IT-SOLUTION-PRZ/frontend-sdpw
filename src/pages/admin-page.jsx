@@ -8,7 +8,17 @@ const fishFields = [
   { name: "name", label: "Gatunek ryby" },
   { name: "description", label: "Opis", type: "textarea" },
   { name: "image_url", label: "Link do zdjęcia" },
-  { name: "is_predator", label: "Drapieżnik", type: "checkbox" }
+  { 
+    name: "category", 
+    label: "Kategoria", 
+    type: "select", 
+    options: [
+      { value: "predator", label: "Drapieżnik" },
+      { value: "marine", label: "Morska" },
+      { value: "salmonid", label: "Salmonid" },
+      { value: "peaceful", label: "Spokojnego żeru" }
+    ] 
+  }
 ]
 
 const baitFields = [
