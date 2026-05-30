@@ -176,6 +176,19 @@ export function GenericCrud({ titleAdd, titleList, titleManage, endpoint, fields
                       className="flex min-h-[100px] w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm transition-colors placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:border-transparent disabled:cursor-not-allowed disabled:opacity-50 resize-y"
                       placeholder={`Wprowadź ${field.label.toLowerCase()}...`}
                     />
+                  ) : field.type === "select" ? (
+                    <select
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name] || ''}
+                      onChange={handleInputChange}
+                      className="flex h-11 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm transition-colors placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:border-transparent disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <option value="" disabled hidden>Wybierz {field.label.toLowerCase()}</option>
+                      {field.options && field.options.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
                   ) : (
                     <Input
                       id={field.name}
@@ -256,6 +269,8 @@ export function GenericCrud({ titleAdd, titleList, titleManage, endpoint, fields
                             ) : (
                               <span className="inline-flex py-0.5 px-2 bg-slate-100 text-slate-600 text-xs rounded-md">Nie</span>
                             )
+                          ) : field.type === 'select' ? (
+                            field.options?.find(opt => opt.value === item[field.name])?.label || item[field.name] || <span className="text-slate-300 italic">Brak danych</span>
                           ) : (
                             item[field.name] || <span className="text-slate-300 italic">Brak danych</span>
                           )}

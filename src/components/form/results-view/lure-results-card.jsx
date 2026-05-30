@@ -11,8 +11,14 @@ import { useCurrentUser } from "@/hooks/use-current-user"
 export function LureResultsCard({ onBack, result, selectedLabels, isLoading = false }) {
   const { user } = useCurrentUser()
 
-  const isError = !result?.id && result?.message
-  const noData = !result
+  const recommendations = Array.isArray(result?.recommendations)
+    ? result.recommendations
+    : result?.bait_details
+      ? [result]
+      : []
+
+  const isError = Boolean(result?.error || (result?.message && recommendations.length === 0))
+  const noData = !result || recommendations.length === 0
 
   const handleDownloadPdf = () => {
     const doc = new jsPDF()
@@ -68,24 +74,38 @@ export function LureResultsCard({ onBack, result, selectedLabels, isLoading = fa
 
     // KULOOPORNE WYCIĄGANIE DANYCH O PRZYNĘCIE:
     // Sprawdza po kolei: result.bait_details -> result.bait -> sam result
-    const bait = result?.bait_details || result?.bait || result;
+    recommendations.forEach((rec, index) => {
+      const bait = rec?.bait_details || rec
+      if (index > 0) {
+        y += 8
+        doc.setLineWidth(0.2)
+        doc.line(20, y, pageWidth - 20, y)
+        y += 10
+      }
 
-    const nameTxt = `Przyneta: ${bait?.name || result?.bait_name || "Nieznana przyneta"}`
-    doc.text(removeAccents(nameTxt), 20, y)
-    y += 8
+      doc.setFont("helvetica", "bold")
+      doc.text(removeAccents(`Rekomendacja ${index + 1}`), 20, y)
+      y += 8
+      doc.setFont("helvetica", "normal")
 
-    const prodTxt = `Producent: ${bait?.producer_name || bait?.producer || "Nieznany producent"}`
-    doc.text(removeAccents(prodTxt), 20, y)
-    y += 8
+      const nameTxt = `Przyneta: ${bait?.name || "Nieznana przyneta"}`
+      doc.text(removeAccents(nameTxt), 20, y)
+      y += 8
 
-    const descTxt = `Opis: ${bait?.description || "Brak opisu przynety."}`
-    const splitDesc = doc.splitTextToSize(removeAccents(descTxt), pageWidth - 40)
-    doc.text(splitDesc, 20, y)
-    y += (splitDesc.length * 7) + 2
+      const prodTxt = `Producent: ${bait?.producer_name || "Nieznany producent"}`
+      doc.text(removeAccents(prodTxt), 20, y)
+      y += 8
 
-    const tipsTxt = `Wskazowki uzycia: ${bait?.usage_tips || "Brak wskazowek uzycia."}`
-    const splitTips = doc.splitTextToSize(removeAccents(tipsTxt), pageWidth - 40)
-    doc.text(splitTips, 20, y)
+      const descTxt = `Opis: ${bait?.description || "Brak opisu przynety."}`
+      const splitDesc = doc.splitTextToSize(removeAccents(descTxt), pageWidth - 40)
+      doc.text(splitDesc, 20, y)
+      y += splitDesc.length * 7 + 2
+
+      const tipsTxt = `Wskazowki uzycia: ${bait?.usage_tips || "Brak wskazowek uzycia."}`
+      const splitTips = doc.splitTextToSize(removeAccents(tipsTxt), pageWidth - 40)
+      doc.text(splitTips, 20, y)
+      y += splitTips.length * 7
+    })
 
     doc.save("raport.pdf")
   }
@@ -131,7 +151,7 @@ export function LureResultsCard({ onBack, result, selectedLabels, isLoading = fa
   return (
     <div className="space-y-6">
       <FishingConditionsCard onBack={onBack} selectedLabels={selectedLabels} />
-      <RecommendedBaitCard result={result} />
+      <RecommendedBaitCard result={recommendations} selectedLabels={selectedLabels} />
       
       {user ? (
         <div className="flex justify-center pt-2">

@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Activity } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
+import { getFishImageUrl, getFishDetailCategoryBadge } from "@/lib/fish-category"
 
 export function FishDetailPage() {
   const { id } = useParams()
@@ -45,7 +46,8 @@ export function FishDetailPage() {
     )
   }
 
-  const placeholderImageUrl = `https://placehold.co/1200x600/e2e8f0/475569?text=${encodeURIComponent(fish.name)}`
+  const imageUrl = getFishImageUrl(fish, "1200x600")
+  const categoryBadge = getFishDetailCategoryBadge(fish)
 
   return (
     <main className="min-h-screen bg-[#ecf3f7] px-4 py-6 sm:py-8 flex flex-col">
@@ -61,7 +63,7 @@ export function FishDetailPage() {
         <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
           <div className="aspect-[21/9] w-full overflow-hidden bg-slate-100 relative">
             <img 
-              src={placeholderImageUrl} 
+              src={imageUrl} 
               alt={fish.name}
               className="h-full w-full object-cover"
             />
@@ -71,11 +73,9 @@ export function FishDetailPage() {
               <div>
                 <h1 className="text-4xl font-extrabold text-slate-900 mb-2">{fish.name}</h1>
                 <div className="flex items-center gap-3">
-                  {fish.is_predator ? (
-                    <span className="bg-red-100 text-red-700 font-bold px-3 py-1 rounded-full text-sm">Drapieżnik</span>
-                  ) : (
-                    <span className="bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-full text-sm">Spokojnego żeru</span>
-                  )}
+                  <span className={`${categoryBadge.className} font-bold px-3 py-1 rounded-full text-sm`}>
+                    {categoryBadge.label}
+                  </span>
                 </div>
               </div>
             </div>

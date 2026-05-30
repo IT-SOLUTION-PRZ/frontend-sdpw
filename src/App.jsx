@@ -1,8 +1,7 @@
-import { Navigate, Route, Routes, Link } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { StaffSuperuserMiddleware } from "@/components/staff-superuser-middleware"
-import { AuthMiddleware } from "@/components/auth-middleware" // <-- Twój nowy strażnik
-import { getAccessToken } from "@/lib/auth-storage" // <-- Do sprawdzania logowania dla linku
+import { AuthMiddleware } from "@/components/auth-middleware"
 
 import { AdminPage } from "@/pages/admin-page"
 import { HomePage } from "@/pages/home-page"
@@ -16,19 +15,9 @@ import { BaitCatalogPage } from "@/pages/bait-catalog-page"
 import { BaitDetailPage } from "@/pages/bait-detail-page"
 
 export default function App() {
-  // Sprawdzamy czy użytkownik jest zalogowany, żeby ew. ukryć linki
-  const isAuthenticated = !!getAccessToken()
-
   return (
     <>
       <ThemeToggle />
-
-      <nav className="p-4">
-        {/* Link do ulubionych pokaże się TYLKO jeśli jesteśmy zalogowani */}
-        {isAuthenticated && (
-          <Link to="/favorites" className="text-blue-600 hover:underline">Ulubione</Link>
-        )}
-      </nav>
 
       <Routes>
         <Route path="/" element={<HomePage />} />

@@ -1,4 +1,4 @@
-import { History, ArrowLeft, Waves, Sun, Fish, Clock, Thermometer, Worm } from "lucide-react"
+import { History, ArrowLeft, Waves, Sun, Fish, Clock, Thermometer, Worm, ThumbsUp, ThumbsDown } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { Card } from "@/components/ui/card"
@@ -60,10 +60,16 @@ export function HistoryPage() {
                         minute: "2-digit",
                       })}
                     </span>
-                    {record.is_accurate ? (
-                      <span className="text-[10px] uppercase tracking-wider font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">Ok</span>
+                    {record.rating === 1 ? (
+                      <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                        <ThumbsUp className="size-3" /> Polecane
+                      </span>
+                    ) : record.rating === -1 ? (
+                      <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-red-700 bg-red-100 px-2.5 py-0.5 rounded-full">
+                        <ThumbsDown className="size-3" /> Nietrafione
+                      </span>
                     ) : (
-                      <span className="text-[10px] uppercase tracking-wider font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">-</span>
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">Brak oceny</span>
                     )}
                   </div>
                   <div className="p-4 sm:p-5 flex flex-col md:flex-row gap-6 justify-between md:items-center">

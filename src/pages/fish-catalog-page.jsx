@@ -8,12 +8,15 @@ import { API_BASE_URL } from "@/lib/api-config"
 import { PageFooter } from "@/components/layout/page-footer"
 import { TopStatisticBanner } from "@/components/catalog/top-statistic-banner"
 import { useTopFish } from "@/hooks/use-tops-statistics"
+import { getFishImageUrl, getFishCategoryBadge } from "@/lib/fish-category"
 
 export function FishCatalogPage() {
   const [fishList, setFishList] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
-  const [isPredator, setIsPredator] = useState("") 
+  
+  // 1. ZMIANA: Nowy stan odpowiadający kategorii z Django
+  const [category, setCategory] = useState("") 
   const [sortOrder, setSortOrder] = useState("name")
 
   const topFish = useTopFish()
@@ -22,7 +25,8 @@ export function FishCatalogPage() {
     const fetchFish = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`${API_BASE_URL}/api/v1/fish/?is_predator=${isPredator}&ordering=${sortOrder}`)
+        // 2. ZMIANA: Zapytanie do API używa teraz parametru 'category' zamiast 'is_predator'
+        const response = await fetch(`${API_BASE_URL}/api/v1/fish/?category=${category}&ordering=${sortOrder}`)
         if (response.ok) {
           const data = await response.json()
           setFishList(data) 
@@ -35,11 +39,11 @@ export function FishCatalogPage() {
     }
 
     fetchFish()
-  }, [isPredator, sortOrder])
+  }, [category, sortOrder]) // 3. ZMIANA: 'category' w tablicy zależności
+
   const filteredFish = fishList.filter((fish) =>
     fish.name?.toLowerCase().includes(searchQuery.toLowerCase())
   )
-
 
   return (
     <main className="min-h-screen bg-[#ecf3f7] px-4 py-6 sm:py-8 flex flex-col">
@@ -78,14 +82,15 @@ export function FishCatalogPage() {
           
           <div className="grid grid-cols-2 gap-4 w-full sm:flex sm:w-auto flex-1 justify-start">
             <div className="relative w-full sm:w-48">
+              {/* 4. ZMIANA: Przeprojektowany select na stringi kategorii zamiast true/false */}
               <select
-                value={isPredator}
-                onChange={(e) => setIsPredator(e.target.value)}
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 className="w-full appearance-none h-9 rounded-full border border-slate-200 bg-white px-4 pr-8 text-sm font-medium text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer"
               >
                 <option value="">Wszystkie ryby</option>
-                <option value="true">Tylko drapieżne</option>
-                <option value="false">Spokojnego żeru</option>
+                <option value="predator">Tylko drapieżne</option>
+                <option value="peaceful">Spokojnego żeru</option>
               </select>
               <SlidersHorizontal className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
             </div>
@@ -112,7 +117,6 @@ export function FishCatalogPage() {
           countText={`${topFish?.search_count ?? 0} wyszukiwań`}
         />
         {loading ? (
-          // Ekran ładowania
           <div className="flex flex-1 items-center justify-center text-slate-500 animate-pulse font-medium">
             Zarzucono wędkę... pobieranie bazy ryb z serwera...
           </div>
@@ -120,7 +124,8 @@ export function FishCatalogPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredFish.length > 0 ? (
               filteredFish.map((fish) => {
-                const placeholderImageUrl = `https://placehold.co/600x400/e2e8f0/475569?text=${encodeURIComponent(fish.name)}`
+                const imageUrl = getFishImageUrl(fish)
+                const categoryBadge = getFishCategoryBadge(fish)
 
                 return (
                   <Link
@@ -130,20 +135,15 @@ export function FishCatalogPage() {
                   >
                     <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
                       <img 
-                        src={placeholderImageUrl} 
+                        src={imageUrl} 
                         alt={`Zdjęcie ryby ${fish.name}`}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
                       />
                       <div className="absolute top-3 right-3">
-                        {fish.is_predator ? (
-                          <span className="bg-red-500/90 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Drapieżnik
-                          </span>
-                        ) : (
-                          <span className="bg-emerald-500/90 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Spokojnego żeru
-                          </span>
-                        )}
+                        <span className={`${categoryBadge.className} text-xs font-bold px-3 py-1 rounded-full shadow-sm`}>
+                          {categoryBadge.label}
+                        </span>
                       </div>
                     </div>
                     <div className="p-5">
