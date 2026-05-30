@@ -6,12 +6,14 @@ export function ThemeToggle() {
 
   useEffect(() => {
     const root = window.document.documentElement
-    const theme = localStorage.getItem("theme") || 
-                 (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    const theme = localStorage.getItem("theme") || "light"
     
     if (theme === "dark") {
       root.classList.add("dark")
       setIsDark(true)
+    } else {
+      root.classList.remove("dark")
+      setIsDark(false)
     }
   }, [])
 
@@ -33,7 +35,7 @@ export function ThemeToggle() {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="fixed bottom-6 right-6 rounded-full w-12 h-12 shadow-md z-50 transition-all hover:scale-110"
+      className="fixed bottom-6 right-6 rounded-full w-12 h-12 shadow-md z-50 transition-all hover:scale-110 bg-white text-slate-900 dark:bg-slate-900 dark:text-white border-slate-200 dark:border-slate-800"
     >
       {isDark ? "☀️" : "🌙"}
     </Button>

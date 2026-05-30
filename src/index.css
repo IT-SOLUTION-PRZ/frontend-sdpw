@@ -5,18 +5,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Typography system (mobile-first, fluid):
- * - type-display: główne nagłówki stron/sekcji hero
- * - type-title: tytuły kart i sekcji
- * - type-body: podstawowe treści i opisy
- * - type-caption: drobne opisy, pomocnicze etykiety i stopka
- *
- * Zasada: w komponentach domenowych używaj klas type-* zamiast ręcznych text-*.
- */
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
   --text-display: clamp(1.125rem, 0.85rem + 1.25vw, 2.625rem);
   --text-title: clamp(1rem, 0.9rem + 0.55vw, 1.5rem);
   --text-body: clamp(0.875rem, 0.84rem + 0.18vw, 1rem);
@@ -25,44 +16,44 @@
   --leading-title: 1.2;
   --leading-body: 1.55;
   --leading-caption: 1.45;
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
@@ -137,69 +128,90 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
-    @apply bg-background text-foreground;
-    }
+    @apply bg-background text-foreground transition-colors duration-200;
+  }
   html {
     @apply font-sans;
-    }
-
-  * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground; }
+  }
 
   .dark body, .dark #root, .dark main {
     background-color: #0f172a !important;
   }
 
-  .dark h1, .dark h2, .dark h3, .dark h4, .dark p, 
-  .dark span, .dark label, .dark div {
+  .dark h1, .dark h2, .dark h3, .dark h4, 
+  .dark .text-slate-900, .dark .text-gray-900,
+  .dark nav a, .dark header a, .dark [role="navigation"] a,
+  .dark [class*="bg-secondary"], .dark .inline-flex.items-center.rounded-full,
+  .dark button:has(svg[class*="arrow-left"]), .dark [class*="text-"]:has(+ button),
+  .dark .flex.items-center.gap-2.text-sm { /* Wybielanie etykiet filtrów */
     color: #ffffff !important;
+    opacity: 1 !important; 
+  }
+
+  .dark label,
+  .dark .text-sm.font-medium,
+  .dark [class*="text-card-foreground"],
+  .dark [class*="bg-secondary"] {
+    color: #ffffff !important;
+  }
+
+  .dark div:has(svg[class*="shield"]), 
+  .dark span:has(svg[class*="user"]),
+  .dark .border-slate-800 {
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  .dark div:has(svg[class*="shield"]) svg {
+    stroke: #ffffff !important;
   }
 
   .dark .text-muted-foreground, 
   .dark .text-slate-500,
-  .dark .text-sm.opacity-70 {
-    color: #ffffff !important;
-    opacity: 0.9 !important; 
+  .dark .text-slate-400,
+  .dark .text-sm.opacity-70,
+  .dark p.text-sm {
+    color: #f1f5f9 !important;
   }
 
-  .dark button.variant-outline,
-  .dark button:has(svg[class*="refresh"]) {
-    border-color: #ffffff !important;
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+  .dark .text-destructive,
+  .dark [class*="text-red"] {
+    color: #fca5a5 !important;
   }
 
-  .dark .bg-slate-900, 
-  .dark button:has(svg[class*="file-text"]) {
+  .dark select, 
+  .dark input, 
+  .dark [role="combobox"], 
+  .dark [class*="select-trigger"],
+  .dark .bg-slate-900 {
     background-color: #1e293b !important;
-    border: 1px solid #334155 !important;
     color: #ffffff !important;
+    border: 1px solid #475569 !important;
   }
   
-  .dark button:has(svg[class*="file-text"]) svg {
+  .dark button[role="combobox"] svg,
+  .dark [class*="select-trigger"] svg,
+  .dark input ~ svg,
+  .dark svg[class*="chevron"],
+  .dark svg[class*="search"] {
     stroke: #ffffff !important;
+    fill: transparent !important;
+    opacity: 1 !important;
+  }
+
+  .dark input::placeholder,
+  .dark button[role="combobox"] span,
+  .dark [class*="select-trigger"] span,
+  .dark [class*="placeholder"] {
+    color: #f1f5f9 !important;
+    opacity: 0.9 !important;
   }
 
   .dark .grid > div, 
-  .dark [class*="bg-white"] {
-    background-color: #1e293b !important;
-    border: 1px solid #334155 !important;
-  }
-
-  .dark .text-slate-900, 
-  .dark .text-gray-900 {
-    color: #ffffff !important;
-  }
-
-  .dark .text-slate-200, .dark .text-gray-200 {
-    color: rgba(255, 255, 255, 0.05) !important;
-  }
-
-  .dark select, .dark input, .dark [role="combobox"] {
-    background-color: #1e293b !important;
-    color: #ffffff !important;
+  .dark [class*="bg-white"],
+  .dark .border {
+    background-color: #111827 !important;
     border: 1px solid #334155 !important;
   }
 
@@ -207,6 +219,28 @@
     background-color: #ffffff !important;
     color: #020617 !important;
     font-weight: bold !important;
+  }
+
+  .dark button.variant-outline {
+    border-color: #475569 !important;
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .dark [role="tablist"] button,
+  .dark .bg-muted button {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    border: 1px solid #475569 !important;
+    opacity: 0.7 !important;
+  }
+
+  .dark [role="tablist"] button[data-state="active"],
+  .dark .bg-muted button[data-state="active"],
+  .dark button[aria-selected="true"] {
+    background-color: #ffffff !important;
+    color: #020617 !important;
+    opacity: 1 !important;
   }
 
   .dark { color-scheme: dark; }
