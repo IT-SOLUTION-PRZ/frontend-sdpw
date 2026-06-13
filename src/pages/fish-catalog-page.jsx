@@ -26,7 +26,7 @@ export function FishCatalogPage() {
       try {
         setLoading(true)
         // 2. ZMIANA: Zapytanie do API używa teraz parametru 'category' zamiast 'is_predator'
-        const response = await fetch(`${API_BASE_URL}/api/v1/fish/?category=${category}&ordering=${sortOrder}`)
+        const response = await fetch(`${API_BASE_URL}/api/v1/fish/?category=${encodeURIComponent(category)}&ordering=${sortOrder}`)
         if (response.ok) {
           const data = await response.json()
           setFishList(data) 
@@ -89,8 +89,10 @@ export function FishCatalogPage() {
                 className="w-full appearance-none h-9 rounded-full border border-slate-200 bg-white px-4 pr-8 text-sm font-medium text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer"
               >
                 <option value="">Wszystkie ryby</option>
-                <option value="predator">Tylko drapieżne</option>
                 <option value="peaceful">Spokojnego żeru</option>
+                <option value="predator">Drapieżniki</option>
+                <option value="marine">Ryby morskie</option>
+                <option value="salmonid">Salmonidy</option>
               </select>
               <SlidersHorizontal className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
             </div>
