@@ -57,12 +57,14 @@ const handleFetchWeather = async () => {
 
         let matchedOption = null
 
-        if (airTemp <= 10) {
+        if (airTemp < 10) {
           matchedOption = tempField.options.find((opt) => opt.label.toLowerCase().includes("zimn"))
-        } else if (airTemp > 10 && airTemp <= 20) {
-          matchedOption = tempField.options.find((opt) => opt.label.toLowerCase().includes("umiark") || opt.label.toLowerCase().includes("umiarkowana"))
+        } else if (airTemp >= 10 && airTemp <= 18) {
+          matchedOption = tempField.options.find((opt) => opt.label.toLowerCase().includes("umiark"))
+        } else if (airTemp > 18 && airTemp <= 24) {
+          matchedOption = tempField.options.find((opt) => opt.label.toLowerCase().includes("ciepła") && !opt.label.toLowerCase().includes("bardzo"))
         } else {
-          matchedOption = tempField.options.find((opt) => opt.label.toLowerCase().includes("ciep") || opt.label.toLowerCase().includes("gorąc"))
+          matchedOption = tempField.options.find((opt) => opt.label.toLowerCase().includes("bardzo"))
         }
 
         if (matchedOption) {
